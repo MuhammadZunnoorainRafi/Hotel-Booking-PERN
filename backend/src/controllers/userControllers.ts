@@ -1,12 +1,17 @@
 import { Request, Response } from 'express';
 import { pool } from '../utils/db';
+import { userSchema } from '../utils/schemas';
 
 // @desc Register User POST
 // @route /api/user/register
 // @access Public
 export const registerController = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const validation = userSchema.safeParse(req.body);
+    if (!validation.success) {
+      return res.status(400).json(validation.error.flatten().fieldErrors);
+    }
+    const { name, email, password } = validation.data;
     const db = await pool.connect();
     const userExists = await db.query(
       `SELECT * FROM users WHERE email=${email}`
@@ -16,7 +21,7 @@ export const registerController = async (req: Request, res: Response) => {
     }
 
     const newUser = await db.query(
-      `INSERT INTO users(name,email,password) VALUES ?`,
+      `INSERT INTO users(name, email, password) VALUES($1, $2, $3)`,
       [name, email, password]
     );
     if (newUser) {

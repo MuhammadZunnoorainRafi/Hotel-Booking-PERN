@@ -1,5 +1,7 @@
 import express from 'express';
+import { registerController } from '../controllers/userControllers';
 
-const authRoute = express.Router();
+const usersRoute = express.Router();
+usersRoute.post('/register', registerController);
 
-authRoute.post('/register');
+export default usersRoute;
