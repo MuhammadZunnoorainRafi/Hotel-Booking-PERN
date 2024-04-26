@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const pool = new Pool({
+export const pool = new Pool({
   connectionString: process.env.POSTGRESQL_URI,
   //   database: process.env.DATABASE,
   //   host: process.env.HOST,
@@ -12,10 +12,9 @@ const pool = new Pool({
 export const executeQuery = async (sql: any, values: any = []) => {
   try {
     const db = await pool.connect();
-    console.log('db connected successfully');
-    // const { rows } = await db.query(sql, values);
+    const { rows } = await db.query(sql, values);
     db.release();
-    // return rows[0];
+    return rows[0];
   } catch (error) {
     console.log(error);
     throw new Error('Error while executing query');

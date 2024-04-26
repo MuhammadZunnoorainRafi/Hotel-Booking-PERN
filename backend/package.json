@@ -4,7 +4,8 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "server": "nodemon"
+    "server": "nodemon",
+    "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "author": "",
   "license": "ISC",
