@@ -6,7 +6,7 @@ const seedUsers = async (db) => {
     name TEXT,
     email TEXT UNIQUE,
     password TEXT,
-    createdAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )`);
   // updatedAt TIMESTAMP WITHOUT TIME ZONE NOT NULL ON UPDATE CURRENT_TIMESTAMP
   // return { usersTable };

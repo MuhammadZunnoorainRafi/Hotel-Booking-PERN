@@ -20,12 +20,18 @@ export const registerController = async (req: Request, res: Response) => {
       res.status(400).json({ message: 'User already exists' });
     }
 
-    const newUser = await db.query(
-      `INSERT INTO users(name, email, password) VALUES($1, $2, $3)`,
-      [name, email, password]
-    );
+    const query = {
+      name: 'insert-user',
+      text: 'INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING *',
+      values: [name, email, password],
+    };
+    // const newUser = await db.query(
+    //   `INSERT INTO users(name, email, password) VALUES($1, $2, $3)`,
+    //   [name, email, password]
+    // );
+    const newUser = await db.query(query);
     if (newUser) {
-      res.status(200).json(newUser);
+      res.status(200).json(newUser.rows[0]);
     } else {
       res.status(401).json({ message: 'User not created' });
     }
