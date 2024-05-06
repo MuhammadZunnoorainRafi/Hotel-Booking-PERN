@@ -6,9 +6,9 @@ const seedUsers = async (db) => {
     name TEXT,
     email TEXT UNIQUE,
     password TEXT,
-    createdAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '0 seconds'
   )`);
-  // updatedAt TIMESTAMP WITHOUT TIME ZONE NOT NULL ON UPDATE CURRENT_TIMESTAMP
   // return { usersTable };
 };
 
@@ -18,7 +18,7 @@ const main = async () => {
   });
   const db = await pool.connect();
   await seedUsers(db);
-  db.release;
+  db.release();
 };
 
 main().catch((error) => {
