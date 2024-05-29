@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { pool } from '../utils/db';
-import { userLogSchema, userRegSchema } from '../utils/schemas';
+import { pool } from '../lib/db';
+import { userLogSchema, userRegSchema } from '../lib/schemas';
 import bcryptjs from 'bcryptjs';
+import { genToken } from '../lib/utils';
 
 // @desc Register User POST
 // @route /api/user/register
@@ -28,7 +29,9 @@ export const registerController = async (req: Request, res: Response) => {
       [name, email, hashedPassword]
     );
     db.release();
-    if (newUser) {
+    if (newUser[0]) {
+      const token = genToken(newUser[0].id);
+      res.cookie('auth_token', token);
       return res.status(200).json(newUser.rows[0]);
     } else {
       return res.status(401).json({ message: 'User not created' });
