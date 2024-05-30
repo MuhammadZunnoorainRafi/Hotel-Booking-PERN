@@ -40,7 +40,6 @@ export const registerController = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'User not created' });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: 'Something went wrong' });
   } finally {
     db.release();
@@ -80,7 +79,6 @@ export const loginController = async (req: Request, res: Response) => {
       res.status(400).json({ message: 'Invalid Credentials' });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: 'Something went wrong' });
   } finally {
     db.release();
