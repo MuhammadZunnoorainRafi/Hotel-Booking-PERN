@@ -15,3 +15,10 @@ export const register = async (formData: RegUser) => {
     throw new Error(res?.statusText);
   }
 };
+
+export const verifyToken = async () => {
+  const res = await axios.get(`${BASE_API_URL}/api/auth/validate-token`, {
+    withCredentials: true,
+  });
+  return res.data;
+};

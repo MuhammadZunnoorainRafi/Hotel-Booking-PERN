@@ -1,0 +1,21 @@
+import { useQuery } from '@tanstack/react-query';
+import { ReactNode, createContext } from 'react';
+import * as actions from '../actions/index';
+
+type ContextType = {
+  isLoggedIn: boolean;
+};
+
+const AppContext = createContext<ContextType | undefined>(undefined);
+
+export const AppContextProvider = ({ children }: { children: ReactNode }) => {
+  const { isError } = useQuery({
+    queryKey: ['verifyToken'],
+    queryFn: actions.verifyToken,
+  });
+  return (
+    <AppContext.Provider value={{ isLoggedIn: !isError }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
