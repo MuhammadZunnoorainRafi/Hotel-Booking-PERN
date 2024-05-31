@@ -84,3 +84,7 @@ export const loginController = async (req: Request, res: Response) => {
     db.release();
   }
 };
+
+export const verifyTokenController = async (req: Request, res: Response) => {
+  res.status(200).json({ userId: req.userId });
+};
