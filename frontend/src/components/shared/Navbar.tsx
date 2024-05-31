@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../../lib/utils';
 
 function Navbar() {
+  const { isLoggedIn } = useAppContext();
   return (
     <div className="navbar bg-base-300">
       <div className="navbar-start">
@@ -70,9 +72,13 @@ function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link to="/login" className="btn btn-primary">
-          Login
-        </Link>
+        {isLoggedIn ? (
+          'User'
+        ) : (
+          <Link to="/login" className="btn btn-primary">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );

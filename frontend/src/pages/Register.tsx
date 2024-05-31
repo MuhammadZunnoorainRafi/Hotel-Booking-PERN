@@ -15,6 +15,11 @@ function Register() {
     formState: { errors, isSubmitting },
   } = useForm<RegUser>({
     resolver: zodResolver(userRegSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
   });
 
   const mutation = useMutation({
@@ -37,40 +42,41 @@ function Register() {
             <span className="label-text">Name</span>
           </label>
           <input
-            {...register}
+            {...register('name')}
             type="text"
             placeholder="name"
             className="input input-bordered"
-            required
           />
-          {errors.name && <p className="text-sm">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-sm text-red-500">{errors.name.message}</p>
+          )}
         </div>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Email</span>
           </label>
           <input
-            {...register}
+            {...register('email')}
             type="email"
             placeholder="email"
             className="input input-bordered"
-            required
           />
-          {errors.email && <p className="text-sm">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-sm text-red-500">{errors.email.message}</p>
+          )}
         </div>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Password</span>
           </label>
           <input
-            {...register}
+            {...register('password')}
             type="password"
             placeholder="password"
             className="input input-bordered"
-            required
           />
           {errors.password && (
-            <p className="text-sm">{errors.password.message}</p>
+            <p className="text-sm text-red-500">{errors.password.message}</p>
           )}
         </div>
         <div className="form-control mt-6">
