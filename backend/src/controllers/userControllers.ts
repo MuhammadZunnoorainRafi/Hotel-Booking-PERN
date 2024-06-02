@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { pool } from '../lib/db';
 import { userLogSchema, userRegSchema } from '../lib/schemas';
 import bcryptjs from 'bcryptjs';
-import { genToken } from '../lib/utils';
+import { cookieToken } from '../lib/utils';
 
 // @desc Register User POST
 // @route /api/user/register
@@ -29,12 +29,7 @@ export const registerController = async (req: Request, res: Response) => {
       [name, email, hashedPassword]
     );
     if (newUser.rows[0]) {
-      const token = genToken(newUser.rows[0].id);
-      res.cookie('auth_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 86400000, // in milliseconds
-      });
+      cookieToken(newUser.rows[0].id, res);
       return res.status(200).json({ message: 'User Created' });
     } else {
       return res.status(401).json({ message: 'User not created' });
@@ -68,12 +63,7 @@ export const loginController = async (req: Request, res: Response) => {
       userExists.rows[0] &&
       (await bcryptjs.compare(password, userExists.rows[0].password))
     ) {
-      const token = genToken(userExists.rows[0].id);
-      res.cookie('auth_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 86400000, // in milliseconds
-      });
+      cookieToken(userExists.rows[0].id, res);
       return res.status(200).json({ userId: userExists.rows[0].id });
     } else {
       res.status(400).json({ message: 'Invalid Credentials' });
