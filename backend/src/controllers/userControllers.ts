@@ -76,9 +76,9 @@ export const loginController = async (req: Request, res: Response) => {
 };
 
 export const verifyTokenController = async (req: Request, res: Response) => {
-  res.status(200).json({ userId: req.userId });
+  return res.status(200).json({ user: req.user });
 };
 
 export const logoutController = async (req: Request, res: Response) => {
-  res.status(200).clearCookie('auth_token');
+  return res.status(200).clearCookie('auth_token');
 };

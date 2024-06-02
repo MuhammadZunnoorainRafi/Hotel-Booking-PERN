@@ -14,14 +14,9 @@ function Register() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegUser>({
     resolver: zodResolver(userRegSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
   });
 
   const queryClient = useQueryClient();
@@ -88,7 +83,7 @@ function Register() {
           )}
         </div>
         <div className="form-control mt-6">
-          {isSubmitting ? (
+          {mutation.isPending ? (
             <button className="btn btn-primary opacity-70">
               <span className="loading loading-spinner"></span>
               loading

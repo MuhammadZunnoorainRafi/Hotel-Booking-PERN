@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import * as actions from '../actions/index';
 import { userLogSchema } from '../lib/schemas';
 import { LogUser } from '../lib/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import * as actions from '../actions/index';
-import toast from 'react-hot-toast';
 
 function Login() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ function Login() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LogUser>({
     resolver: zodResolver(userLogSchema),
   });
@@ -28,6 +28,9 @@ function Login() {
       await queryClient.invalidateQueries({ queryKey: ['verifyToken'] });
       navigate('/');
       reset();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -68,7 +71,7 @@ function Login() {
           )}
         </div>
         <div className="form-control mt-6 space-y-1">
-          {isSubmitting ? (
+          {mutation.isPending ? (
             <button className="btn btn-primary opacity-70">
               <span className="loading loading-spinner"></span>
               loading

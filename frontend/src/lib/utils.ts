@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { AppContext, AppContextType } from '../context/AppContext';
-import { ErrorT } from './types';
+import { AppContext } from '../context/AppContext';
+import { AppContextType, ErrorT } from './types';
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
@@ -8,5 +8,5 @@ export const useAppContext = () => {
 };
 
 export const errorHandler = (err: ErrorT) => {
-  return err.response.data.message || err.message;
+  return err.response?.data?.message || err.message;
 };

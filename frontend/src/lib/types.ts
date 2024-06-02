@@ -1,6 +1,15 @@
 import z from 'zod';
 import { userLogSchema, userRegSchema } from './schemas';
 
+export type AppContextType = {
+  isLoggedIn: boolean;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+};
+
 export type User = {
   id: string;
   name: string;

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAppContext } from '../../lib/utils';
 
 function Navbar() {
-  const { isLoggedIn } = useAppContext();
+  const { isLoggedIn, user } = useAppContext();
   return (
     <div className="navbar bg-base-300">
       <div className="navbar-start">
@@ -72,8 +72,8 @@ function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        {isLoggedIn ? (
-          'User'
+        {isLoggedIn && user ? (
+          <h1>{user.name}</h1>
         ) : (
           <Link to="/login" className="btn btn-primary">
             Login

@@ -11,6 +11,6 @@ const usersRoute = express.Router();
 usersRoute.post('/register', registerController);
 usersRoute.post('/login', loginController);
 usersRoute.get('/validate-token', verifyToken, verifyTokenController);
-usersRoute.get('/logout', verifyToken, verifyTokenController);
+usersRoute.get('/logout', verifyTokenController);
 
 export default usersRoute;

@@ -5,7 +5,7 @@ import { pool } from '../lib/db';
 declare global {
   namespace Express {
     interface Request {
-      userId: string;
+      user: { id: string; name: string; email: string };
     }
   }
 }
@@ -18,18 +18,21 @@ export const verifyToken = async (
   const token = req.cookies['auth_token'];
 
   if (!token) {
-    res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   const db = await pool.connect();
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.userId = (decoded as JwtPayload).userId;
+    const userId = (decoded as JwtPayload).userId;
     const { rows } = await db.query(
-      'SELECT id,name,email,created_at FROM users'
+      'SELECT id,name,email,created_at FROM users WHERE id=?',
+      [userId]
     );
-    res.status(200).json({ user: rows[0] });
+    req.user = rows[0];
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized' });
+  } finally {
+    db.release();
   }
 };
