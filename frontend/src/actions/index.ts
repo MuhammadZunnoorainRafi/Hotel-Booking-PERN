@@ -1,1 +1,1 @@
-export { register, verifyToken } from './auth-actions';
+export { register, verifyToken, login } from './auth-actions';

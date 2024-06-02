@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ErrorT, RegUser } from '../lib/types';
+import { ErrorT, LogUser, RegUser } from '../lib/types';
 import { errorHandler } from '../lib/utils';
 
 const BASE_API_URL = import.meta.env.VITE_API_URL;
@@ -13,6 +13,17 @@ export const register = async (formData: RegUser) => {
       }
     );
 
+    return res.data;
+  } catch (error) {
+    throw new Error(errorHandler(error as ErrorT));
+  }
+};
+
+export const login = async (formData: LogUser) => {
+  try {
+    const res = await axios.post(`${BASE_API_URL}/auth/user/login`, formData, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (error) {
     throw new Error(errorHandler(error as ErrorT));

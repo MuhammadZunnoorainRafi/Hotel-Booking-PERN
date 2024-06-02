@@ -1,13 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userRegSchema } from '../lib/schemas';
 import { RegUser } from '../lib/types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as actions from '../actions/index';
 import toast from 'react-hot-toast';
 
 function Register() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -22,15 +24,21 @@ function Register() {
     },
   });
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: actions.register,
-    onSuccess: () => toast.success('User Registered Successfully'),
+    onSuccess: async () => {
+      toast.success('User Registered Successfully');
+      await queryClient.invalidateQueries({ queryKey: ['verifyToken'] });
+      navigate('/');
+      reset();
+    },
     onError: (error: Error) => toast.error(error.message),
   });
 
   const formSubmit = (formData: RegUser) => {
     mutation.mutate(formData);
-    reset();
   };
 
   return (
