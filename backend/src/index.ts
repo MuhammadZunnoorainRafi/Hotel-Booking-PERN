@@ -2,8 +2,10 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import usersRoute from './routes/userRoutes';
+import cookieParser from 'cookie-parser';
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(

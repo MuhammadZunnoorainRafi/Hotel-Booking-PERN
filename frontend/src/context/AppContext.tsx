@@ -12,8 +12,8 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const { isError } = useQuery({
     queryKey: ['verifyToken'],
     queryFn: actions.verifyToken,
-    retry: false,
   });
+
   return (
     <AppContext.Provider value={{ isLoggedIn: !isError }}>
       {children}

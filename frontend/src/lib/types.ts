@@ -11,3 +11,12 @@ export type User = {
 
 export type RegUser = z.infer<typeof userRegSchema>;
 export type LogUser = z.infer<typeof userLogSchema>;
+
+export type ErrorT = {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+  message: string;
+};
