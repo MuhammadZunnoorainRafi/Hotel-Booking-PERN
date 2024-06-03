@@ -11,7 +11,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     queryFn: actions.verifyToken,
   });
   return (
-    <AppContext.Provider value={{ isLoggedIn: !isError, user: data }}>
+    <AppContext.Provider value={{ isLoggedIn: !isError, user: data?.user }}>
       {children}
     </AppContext.Provider>
   );

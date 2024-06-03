@@ -1,10 +1,25 @@
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../../lib/utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import * as actions from '../../actions/index';
+import toast from 'react-hot-toast';
 
 function Navbar() {
   const { isLoggedIn, user } = useAppContext();
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: actions.logout,
+    onSuccess: async () => {
+      toast.success('Logout Successfully');
+      await queryClient.invalidateQueries({ queryKey: ['verifyToken'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   return (
-    <div className="navbar bg-base-300">
+    <div className="navbar bg-base-300 ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -73,7 +88,28 @@ function Navbar() {
       </div>
       <div className="navbar-end">
         {isLoggedIn && user ? (
-          <h1>{user.name}</h1>
+          <div className="dropdown dropdown-end mr-2">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <button className="btn btn-success text-white">
+                {user.name}
+              </button>
+            </div>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-28"
+            >
+              <button
+                onClick={() => mutation.mutate()}
+                className="btn btn-sm btn-error text-white"
+              >
+                {mutation.isPending ? 'Loading...' : 'Logout'}
+              </button>
+            </ul>
+          </div>
         ) : (
           <Link to="/login" className="btn btn-primary">
             Login

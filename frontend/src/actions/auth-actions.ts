@@ -31,7 +31,9 @@ export const login = async (formData: LogUser) => {
 };
 
 export const logout = async () => {
-  await axios.get(`${BASE_API_URL}/api/user/logout`);
+  await axios.post(`${BASE_API_URL}/api/user/logout`, '', {
+    withCredentials: true,
+  });
 };
 
 export const verifyToken = async () => {
@@ -39,6 +41,7 @@ export const verifyToken = async () => {
     const res = await axios.get(`${BASE_API_URL}/api/user/validate-token`, {
       withCredentials: true,
     });
+    console.log('✅');
     return res.data;
   } catch (error) {
     throw new Error(errorHandler(error as ErrorT));
