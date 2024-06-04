@@ -5,6 +5,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "server": "nodemon",
+    "build": "npm install && npx tsc",
+    "start": "node ./dist/index.js",
     "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "author": "",

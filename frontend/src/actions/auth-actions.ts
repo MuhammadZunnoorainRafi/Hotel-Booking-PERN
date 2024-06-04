@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ErrorT, LogUser, RegUser } from '../lib/types';
 import { errorHandler } from '../lib/utils';
 
-const BASE_API_URL = import.meta.env.VITE_API_URL;
+const BASE_API_URL = import.meta.env.VITE_API_URL || '';
 export const register = async (formData: RegUser) => {
   try {
     const res = await axios.post(
