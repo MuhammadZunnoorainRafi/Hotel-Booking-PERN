@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import * as actions from '../actions/index';
 import { userRegSchema } from '../lib/schemas';
 import { RegUser } from '../lib/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import * as actions from '../actions/index';
-import toast from 'react-hot-toast';
 
 function Register() {
   const navigate = useNavigate();

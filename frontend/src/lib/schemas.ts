@@ -23,5 +23,5 @@ export const hotelFormSchema = z.object({
   imageFiles: z.any().refine((val) => val.length > 0, 'Select images'),
   imageUrls: z.array(z.string()).min(1, 'Select at images'),
   adultCount: z.number().min(1, 'Enter adult count'),
-  childCount: z.number().min(1, 'Enter child count'),
+  childCount: z.number().min(0, 'Enter child count'),
 });
