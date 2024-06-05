@@ -18,9 +18,9 @@ import { AppContextProvider } from './context/AppContext.tsx';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="/" element={<Hero />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route index element={<Hero />} />
+      <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
     </Route>
   )
 );
