@@ -6,6 +6,7 @@ function DetailsSection() {
     register,
     formState: { errors },
   } = useFormContext<HotelFormData>();
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-bold mb-3">Add Hotel</h1>
@@ -60,9 +61,10 @@ function DetailsSection() {
         Price Per Night
         <input
           type="number"
-          min={1}
           className="border rounded w-full py-1 px-2 font-normal"
-          {...register('pricePerNight')}
+          {...register('pricePerNight', {
+            valueAsNumber: true,
+          })}
         />
         {errors.pricePerNight && (
           <span className="text-red-500">{errors.pricePerNight.message}</span>
@@ -71,14 +73,16 @@ function DetailsSection() {
       <label className="text-gray-700 text-sm font-bold max-w-[50%]">
         Star Rating
         <select
-          {...register('starRating')}
+          {...register('starRating', { valueAsNumber: true })}
           className="border rounded w-full p-2 text-gray-700 font-normal"
         >
           <option value="" className="text-sm font-bold">
             Select as Rating
           </option>
-          {[1, 2, 3, 4, 5].map((num) => (
-            <option value={num}>{num}</option>
+          {[1, 2, 3, 4, 5].map((num, ind) => (
+            <option key={ind} value={num}>
+              {num}
+            </option>
           ))}
         </select>
         {errors.starRating && (

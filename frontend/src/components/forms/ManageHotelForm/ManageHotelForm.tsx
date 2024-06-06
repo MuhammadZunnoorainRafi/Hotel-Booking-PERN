@@ -5,10 +5,15 @@ import { HotelFormData } from '../../../lib/types';
 import DetailsSection from './DetailsSection';
 import TypeSection from './TypeSection';
 import FacilitiesSection from './FacilitiesSection';
+import GuestsSection from './GuestSection';
+import ImagesSection from './ImageSection';
 
 function ManageHotelForm() {
   const formMethods = useForm<HotelFormData>({
     resolver: zodResolver(hotelFormSchema),
+    defaultValues: {
+      facilities: [],
+    },
   });
 
   const formSubmit = (formData: HotelFormData) => {
@@ -22,6 +27,13 @@ function ManageHotelForm() {
           <DetailsSection />
           <TypeSection />
           <FacilitiesSection />
+          <GuestsSection />
+          <ImagesSection />
+          <div className="text-center">
+            <button className="btn btn-primary btn-wide my-2" type="submit">
+              Submit
+            </button>
+          </div>
         </form>
       </FormProvider>
     </div>

@@ -16,12 +16,34 @@ export const hotelFormSchema = z.object({
   city: z.string().min(1, 'Enter city'),
   country: z.string().min(1, 'Enter country'),
   description: z.string().min(1, 'Enter description'),
-  type: z.string().min(1, 'Enter type'),
-  pricePerNight: z.number().min(1, 'Enter price'),
-  starRating: z.number().min(1, 'Enter Star').max(5, 'Max value is till 5'),
-  facilities: z.array(z.string()).min(1, 'Select at least one field'),
-  imageFiles: z.any().refine((val) => val.length > 0, 'Select images'),
-  imageUrls: z.array(z.string()).min(1, 'Select at images'),
-  adultCount: z.number().min(1, 'Enter adult count'),
-  childCount: z.number().min(0, 'Enter child count'),
+  type: z
+    .string({
+      invalid_type_error: 'Select Type',
+    })
+    .min(1, 'Select type'),
+  pricePerNight: z
+    .number({
+      invalid_type_error: 'Enter price',
+    })
+    .min(1, 'Enter price'),
+  starRating: z
+    .number({
+      invalid_type_error: 'Select value',
+    })
+    .min(1, 'Select value')
+    .max(5, 'Max value is till 5'),
+  facilities: z
+    .array(z.string())
+    .nonempty({ message: 'Select at least one field' }),
+  imageFiles: z
+    .any()
+    .refine((val) => val.length > 0, 'Select images')
+    .refine((val) => val.length < 7, 'Select images between limit of 1-6'),
+  imageUrls: z.array(z.string()).min(1, 'Select at least one images'),
+  adultCount: z
+    .number({ invalid_type_error: 'Enter adult count' })
+    .min(1, 'Enter adult count'),
+  childCount: z
+    .number({ invalid_type_error: 'Enter child count' })
+    .min(0, 'Enter child count'),
 });
