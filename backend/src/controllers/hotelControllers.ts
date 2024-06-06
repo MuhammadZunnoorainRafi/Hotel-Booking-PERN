@@ -9,6 +9,7 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
   try {
     const validations = hotelFormSchema.safeParse(req.body);
     if (!validations.success) {
+      console.log(validations.error.flatten().fieldErrors);
       return res.status(400).json(validations.error.flatten().fieldErrors);
     }
 
@@ -24,7 +25,6 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
       childCount,
       pricePerNight,
     } = validations.data;
-
     const imageFiles = req.files as Express.Multer.File[];
     const imageUrls = await uploadImages(imageFiles);
 
@@ -44,7 +44,7 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
     };
 
     const { rows } = await db.query(
-      'INSERT INTO hotels(user_id,name,city,country,description,type,adult_count,child_count,facilities,price_per_night,star_rating,image_urls) VALUES($1,2$,3$,4$,5$,6$,7$,8$,9$,10$,11$,12$)',
+      'INSERT INTO hotels(user_id,name,city,country,description,type,adult_count,child_count,facilities,price_per_night,star_rating,image_urls) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING name',
       Object.values(data)
     );
     if (rows[0]) {

@@ -41,7 +41,6 @@ export const verifyToken = async () => {
     const res = await axios.get(`${BASE_API_URL}/api/user/validate-token`, {
       withCredentials: true,
     });
-    console.log('✅');
     return res.data;
   } catch (error) {
     throw new Error(errorHandler(error as ErrorT));

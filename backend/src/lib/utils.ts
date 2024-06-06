@@ -18,7 +18,7 @@ export const cookieToken = (userId: string, res: Response) => {
 
 export const uploadImages = async (imageFiles: Express.Multer.File[]) => {
   const uploadPromises = imageFiles.map(async (image) => {
-    const b64 = Buffer.from(image.buffer).toString(); // it just converts the image file into an array
+    const b64 = Buffer.from(image.buffer).toString('base64'); // it just converts the image file into an array
     const dataURI = 'data:' + image.mimetype + ';base64,' + b64;
     const res = await cloudinary.v2.uploader.upload(dataURI);
     return res.url;

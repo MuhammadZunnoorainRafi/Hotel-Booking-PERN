@@ -26,7 +26,7 @@ export const registerController = async (req: Request, res: Response) => {
     const hashedPassword = await bcryptjs.hash(password, 10);
 
     const newUser = await db.query(
-      'INSERT INTO users(name, email, password) VALUES ($1,$2,$3) RETURNING *',
+      'INSERT INTO users(name, email, password) VALUES ($1,$2,$3) RETURNING email',
       [name, email, hashedPassword]
     );
     if (newUser.rows[0]) {
