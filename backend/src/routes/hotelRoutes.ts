@@ -1,9 +1,12 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
+import { hotelFormSchema } from '../lib/schemas';
+import { verifyToken } from '../middleware/authMiddleware';
+import { addHotelController } from '../controllers/hotelControllers';
 
-const storage = multer.memoryStorage();
+// const storage = multer.memoryStorage();
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024,
   },
@@ -12,11 +15,10 @@ const upload = multer({
 const hotelRoutes = express.Router();
 
 hotelRoutes.post(
-  '/',
+  '/add',
+  verifyToken,
   upload.array('imageFiles', 6),
-  (req: Request, res: Response) => {
-    const imageFiles = req.files as Express.Multer.File[];
-  }
+  addHotelController
 );
 
 export default hotelRoutes;

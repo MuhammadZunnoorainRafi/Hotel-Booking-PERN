@@ -36,10 +36,13 @@ export const hotelFormSchema = z.object({
     .array(z.string())
     .nonempty({ message: 'Select at least one field' }),
   imageFiles: z
-    .any()
+    .instanceof(FileList)
     .refine((val) => val.length > 0, 'Select images')
     .refine((val) => val.length < 7, 'Select images between limit of 1-6'),
-  imageUrls: z.array(z.string()).min(1, 'Select at least one images'),
+  imageUrls: z
+    .array(z.string())
+    .min(1, 'Select at least one images')
+    .optional(),
   adultCount: z
     .number({ invalid_type_error: 'Enter adult count' })
     .min(1, 'Enter adult count'),

@@ -12,18 +12,21 @@ function ManageHotelForm() {
   const formMethods = useForm<HotelFormData>({
     resolver: zodResolver(hotelFormSchema),
     defaultValues: {
-      facilities: [],
+      // facilities: [],
     },
   });
 
+  const { handleSubmit } = formMethods;
+
   const formSubmit = (formData: HotelFormData) => {
     console.log(formData);
+    console.log(123);
   };
 
   return (
     <div>
       <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(formSubmit)}>
+        <form onSubmit={handleSubmit(formSubmit)}>
           <DetailsSection />
           <TypeSection />
           <FacilitiesSection />
