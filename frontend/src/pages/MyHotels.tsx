@@ -9,7 +9,6 @@ const MyHotels = () => {
     queryKey: ['fetchMyHotels'],
     queryFn: actions.getAllHotels,
   });
-
   if (isLoading) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">

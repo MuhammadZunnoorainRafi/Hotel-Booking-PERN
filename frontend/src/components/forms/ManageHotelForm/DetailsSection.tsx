@@ -62,18 +62,18 @@ function DetailsSection() {
         <input
           type="number"
           className="border rounded w-full py-1 px-2 font-normal"
-          {...register('pricePerNight', {
+          {...register('price_per_night', {
             valueAsNumber: true,
           })}
         />
-        {errors.pricePerNight && (
-          <span className="text-red-500">{errors.pricePerNight.message}</span>
+        {errors.price_per_night && (
+          <span className="text-red-500">{errors.price_per_night.message}</span>
         )}
       </label>
       <label className="text-gray-700 text-sm font-bold max-w-[50%]">
         Star Rating
         <select
-          {...register('starRating', { valueAsNumber: true })}
+          {...register('star_rating', { valueAsNumber: true })}
           className="border rounded w-full p-2 text-gray-700 font-normal"
         >
           <option value="" className="text-sm font-bold">
@@ -85,8 +85,8 @@ function DetailsSection() {
             </option>
           ))}
         </select>
-        {errors.starRating && (
-          <span className="text-red-500">{errors.starRating.message}</span>
+        {errors.star_rating && (
+          <span className="text-red-500">{errors.star_rating.message}</span>
         )}
       </label>
     </div>

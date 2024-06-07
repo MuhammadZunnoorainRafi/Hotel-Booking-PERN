@@ -16,13 +16,13 @@ const GuestsSection = () => {
           <input
             className="border rounded w-full py-2 px-3 font-normal"
             type="number"
-            {...register('adultCount', {
+            {...register('adult_count', {
               valueAsNumber: true,
             })}
           />
-          {errors.adultCount?.message && (
+          {errors.adult_count?.message && (
             <span className="text-red-500 text-sm fold-bold">
-              {errors.adultCount?.message}
+              {errors.adult_count?.message}
             </span>
           )}
         </label>
@@ -31,13 +31,13 @@ const GuestsSection = () => {
           <input
             className="border rounded w-full py-2 px-3 font-normal"
             type="number"
-            {...register('childCount', {
+            {...register('child_count', {
               valueAsNumber: true,
             })}
           />
-          {errors.childCount?.message && (
+          {errors.child_count?.message && (
             <span className="text-red-500 text-sm fold-bold">
-              {errors.childCount?.message}
+              {errors.child_count?.message}
             </span>
           )}
         </label>

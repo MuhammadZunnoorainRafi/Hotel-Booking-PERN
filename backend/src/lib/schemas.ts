@@ -21,11 +21,11 @@ export const hotelFormSchema = z.object({
       invalid_type_error: 'Select Type',
     })
     .min(1, 'Select type'),
-  pricePerNight: z.string().min(1, 'Enter price'),
-  starRating: z.string().min(1, 'Enter Star rating'),
+  price_per_night: z.string().min(1, 'Enter price'),
+  star_rating: z.string().min(1, 'Enter Star rating'),
   facilities: z
     .array(z.string())
     .nonempty({ message: 'Select at least one field' }),
-  adultCount: z.string().min(1, 'Enter adult count'),
-  childCount: z.string().min(1, 'Enter child count'),
+  adult_count: z.string().min(1, 'Enter adult count'),
+  child_count: z.string().min(1, 'Enter child count'),
 });

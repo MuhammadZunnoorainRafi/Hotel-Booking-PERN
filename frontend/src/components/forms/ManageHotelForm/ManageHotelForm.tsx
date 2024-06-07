@@ -1,39 +1,50 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { hotelFormSchema } from '../../../lib/schemas';
-import { HotelFormData } from '../../../lib/types';
+import { HotelFormData, HotelTypeSql } from '../../../lib/types';
 import DetailsSection from './DetailsSection';
 import TypeSection from './TypeSection';
 import FacilitiesSection from './FacilitiesSection';
 import GuestsSection from './GuestSection';
 import ImagesSection from './ImageSection';
+import { useEffect } from 'react';
 
 type Props = {
   onSave: (formData: FormData) => void;
+  hotel?: HotelTypeSql;
   isLoading: boolean;
 };
 
-function ManageHotelForm({ onSave, isLoading }: Props) {
+function ManageHotelForm({ onSave, hotel, isLoading }: Props) {
   const formMethods = useForm<HotelFormData>({
     resolver: zodResolver(hotelFormSchema),
     defaultValues: {
-      // facilities: [],
+      facilities: [],
     },
   });
 
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, reset } = formMethods;
+
+  useEffect(() => {
+    if (hotel) {
+      reset(hotel);
+    }
+  }, [hotel, reset]);
 
   const formSubmit = (formDataJson: HotelFormData) => {
     const formData = new FormData();
+    if (hotel) {
+      formData.append('id', hotel.id);
+    }
     formData.append('name', formDataJson.name);
     formData.append('city', formDataJson.city);
     formData.append('country', formDataJson.country);
     formData.append('description', formDataJson.description);
     formData.append('type', formDataJson.type);
-    formData.append('pricePerNight', formDataJson.pricePerNight.toString());
-    formData.append('starRating', formDataJson.starRating.toString());
-    formData.append('adultCount', formDataJson.adultCount.toString());
-    formData.append('childCount', formDataJson.childCount.toString());
+    formData.append('price_per_night', formDataJson.price_per_night.toString());
+    formData.append('star_rating', formDataJson.star_rating.toString());
+    formData.append('adult_count', formDataJson.adult_count.toString());
+    formData.append('child_count', formDataJson.child_count.toString());
 
     formDataJson.facilities.forEach((facility, index) => {
       formData.append(`facilities[${index}]`, facility);

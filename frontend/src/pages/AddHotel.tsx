@@ -9,7 +9,7 @@ function AddHotel() {
   const mutation = useMutation({
     mutationFn: actions.addHotel,
     onSuccess: () => {
-      navigate('/');
+      navigate('/my-hotels');
       toast.success('Hotel added Successfully');
     },
     onError: (error) => {

@@ -21,7 +21,25 @@ export type User = {
 export type RegUser = z.infer<typeof userRegSchema>;
 export type LogUser = z.infer<typeof userLogSchema>;
 
-export type HotelType = {
+// export type HotelType = {
+//   id: string;
+//   userId: string;
+//   name: string;
+//   city: string;
+//   country: string;
+//   description: string;
+//   type: string;
+//   adultCount: number;
+//   childCount: number;
+//   facilities: string[];
+//   pricePerNight: number;
+//   starRating: number;
+//   imageUrls: string[];
+//   createdAt: Date;
+//   // bookings: BookingType[];
+// };
+
+export type HotelTypeSql = {
   id: string;
   user_id: string;
   name: string;

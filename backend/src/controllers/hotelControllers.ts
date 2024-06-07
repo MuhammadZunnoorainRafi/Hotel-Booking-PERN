@@ -22,11 +22,11 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
       country,
       description,
       type,
-      starRating,
+      star_rating,
       facilities,
-      adultCount,
-      childCount,
-      pricePerNight,
+      adult_count,
+      child_count,
+      price_per_night,
     } = validations.data;
     const imageFiles = req.files as Express.Multer.File[];
     const imageUrls = await uploadImages(imageFiles);
@@ -38,11 +38,11 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
       country: country,
       description: description,
       type: type,
-      adult_count: adultCount,
-      child_count: childCount,
+      adult_count: adult_count,
+      child_count: child_count,
       facilities: facilities,
-      price_per_night: pricePerNight,
-      star_rating: starRating,
+      price_per_night: price_per_night,
+      star_rating: star_rating,
       image_urls: imageUrls,
     };
 
@@ -97,7 +97,6 @@ export const getSingleHotelController = async (
       'SELECT * FROM hotels WHERE id=$1 AND user_id=$2',
       [id, req.user?.id]
     );
-    console.log(rows);
     res.status(200).json(rows[0]);
   } catch (error) {
     return res.status(400).json({ message: 'Error while fetching data' });

@@ -21,12 +21,12 @@ export const hotelFormSchema = z.object({
       invalid_type_error: 'Select Type',
     })
     .min(1, 'Select type'),
-  pricePerNight: z
+  price_per_night: z
     .number({
       invalid_type_error: 'Enter price',
     })
     .min(1, 'Enter price'),
-  starRating: z
+  star_rating: z
     .number({
       invalid_type_error: 'Select value',
     })
@@ -39,14 +39,14 @@ export const hotelFormSchema = z.object({
     .instanceof(FileList)
     .refine((val) => val.length > 0, 'Select images')
     .refine((val) => val.length < 7, 'Select images between limit of 1-6'),
-  imageUrls: z
+  image_urls: z
     .array(z.string())
     .min(1, 'Select at least one images')
     .optional(),
-  adultCount: z
+  adult_count: z
     .number({ invalid_type_error: 'Enter adult count' })
     .min(1, 'Enter adult count'),
-  childCount: z
+  child_count: z
     .number({ invalid_type_error: 'Enter child count' })
     .min(0, 'Enter child count'),
 });
