@@ -4,6 +4,9 @@ import { RequestUser } from '../middleware/authMiddleware';
 import { uploadImages } from '../lib/utils';
 import { pool } from '../lib/db';
 
+// @desc Add Hotel
+// @route /api/hotel/add
+// @access PRIVATE
 export const addHotelController = async (req: RequestUser, res: Response) => {
   const db = await pool.connect();
   try {
@@ -57,5 +60,42 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
     return res.status(400).json({ message: 'Something went wrong' });
   } finally {
     db.release();
+  }
+};
+
+// @desc Get All Hotels
+// @route /api/hotel/getAll
+// @access PRIVATE
+
+export const getAllHotelsController = async (
+  req: RequestUser,
+  res: Response
+) => {
+  const db = await pool.connect();
+  try {
+    const { rows } = await db.query('SELECT * FROM hotels WHERE user_id=$1', [
+      req.user?.id,
+    ]);
+    res.status(200).json({ allHotels: rows[0] });
+  } catch (error) {
+    return res.status(400).json({ message: 'Error while fetching data' });
+  }
+};
+
+// @desc Get Single Hotel
+// @route /api/hotel/getAll
+// @access PRIVATE
+
+export const getSingleHotelController = async (
+  req: RequestUser,
+  res: Response
+) => {
+  const db = await pool.connect();
+  const { id } = req.params;
+  try {
+    const { rows } = await db.query('SELECT * FROM hotels WHERE id=$1', [id]);
+    res.status(200).json({ allHotels: rows[0] });
+  } catch (error) {
+    return res.status(400).json({ message: 'Error while fetching data' });
   }
 };

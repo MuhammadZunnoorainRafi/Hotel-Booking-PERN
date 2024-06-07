@@ -1,2 +1,2 @@
 export { register, verifyToken, login, logout } from './auth-actions';
-export { addHotel } from './hotel-actions';
+export { addHotel, getAllHotels } from './hotel-actions';
