@@ -22,20 +22,20 @@ export type RegUser = z.infer<typeof userRegSchema>;
 export type LogUser = z.infer<typeof userLogSchema>;
 
 export type HotelType = {
-  _id: string;
-  userId: string;
+  id: string;
+  user_id: string;
   name: string;
   city: string;
   country: string;
   description: string;
   type: string;
-  adultCount: number;
-  childCount: number;
+  adult_count: number;
+  child_count: number;
   facilities: string[];
-  pricePerNight: number;
-  starRating: number;
-  imageUrls: string[];
-  lastUpdated: Date;
+  price_per_night: number;
+  star_rating: number;
+  image_urls: string[];
+  created_at: Date;
   // bookings: BookingType[];
 };
 

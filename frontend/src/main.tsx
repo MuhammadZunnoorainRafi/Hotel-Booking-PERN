@@ -15,6 +15,8 @@ import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppContextProvider } from './context/AppContext.tsx';
 import AddHotel from './pages/AddHotel.tsx';
+import MyHotels from './pages/MyHotels.tsx';
+import EditHotel from './pages/EditHotel.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +25,8 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="add-hotel" element={<AddHotel />} />
+      <Route path="my-hotels" element={<MyHotels />} />
+      <Route path="edit-hotel/:id" element={<EditHotel />} />
     </Route>
   )
 );

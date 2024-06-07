@@ -16,7 +16,9 @@ export const addHotel = async (formData: FormData) => {
 
 export const getAllHotels = async (): Promise<HotelType[]> => {
   try {
-    const res = await axios.get(`${BASE_API_URL}/api/hotel/getAll`);
+    const res = await axios.get(`${BASE_API_URL}/api/hotel/getAll`, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (error) {
     throw new Error(errorHandler(error as ErrorT));
@@ -25,7 +27,9 @@ export const getAllHotels = async (): Promise<HotelType[]> => {
 
 export const getOneHotel = async (hotelId: string): Promise<HotelType> => {
   try {
-    const res = await axios.get(`${BASE_API_URL}/api/hotel/get/${hotelId}`);
+    const res = await axios.get(`${BASE_API_URL}/api/hotel/get/${hotelId}`, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (error) {
     throw new Error(errorHandler(error as ErrorT));

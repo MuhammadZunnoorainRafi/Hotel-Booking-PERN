@@ -5,6 +5,7 @@ import { verifyToken } from '../middleware/authMiddleware';
 import {
   addHotelController,
   getAllHotelsController,
+  getSingleHotelController,
 } from '../controllers/hotelControllers';
 
 // const storage = multer.memoryStorage();
@@ -24,6 +25,6 @@ hotelRoutes.post(
   addHotelController
 );
 hotelRoutes.get('/getAll', verifyToken, getAllHotelsController);
-hotelRoutes.get('/get/:id', verifyToken, getAllHotelsController);
+hotelRoutes.get('/get/:id', verifyToken, getSingleHotelController);
 
 export default hotelRoutes;

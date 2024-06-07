@@ -76,7 +76,7 @@ export const getAllHotelsController = async (
     const { rows } = await db.query('SELECT * FROM hotels WHERE user_id=$1', [
       req.user?.id,
     ]);
-    res.status(200).json({ allHotels: rows[0] });
+    res.status(200).json(rows);
   } catch (error) {
     return res.status(400).json({ message: 'Error while fetching data' });
   }
@@ -93,8 +93,12 @@ export const getSingleHotelController = async (
   const db = await pool.connect();
   const { id } = req.params;
   try {
-    const { rows } = await db.query('SELECT * FROM hotels WHERE id=$1', [id]);
-    res.status(200).json({ allHotels: rows[0] });
+    const { rows } = await db.query(
+      'SELECT * FROM hotels WHERE id=$1 AND user_id=$2',
+      [id, req.user?.id]
+    );
+    console.log(rows);
+    res.status(200).json(rows[0]);
   } catch (error) {
     return res.status(400).json({ message: 'Error while fetching data' });
   }
