@@ -36,4 +36,12 @@ export const getOneHotel = async (hotelId: string): Promise<HotelTypeSql> => {
   }
 };
 
-export const updateHotel = async () => {};
+export const updateHotel = async (formData: FormData) => {
+  try {
+    await axios.put(`${BASE_API_URL}/api/hotel/edit`, formData, {
+      withCredentials: true,
+    });
+  } catch (error) {
+    throw new Error(errorHandler(error as ErrorT));
+  }
+};

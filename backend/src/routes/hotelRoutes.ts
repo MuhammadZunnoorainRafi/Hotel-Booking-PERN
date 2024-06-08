@@ -4,6 +4,7 @@ import { hotelFormSchema } from '../lib/schemas';
 import { verifyToken } from '../middleware/authMiddleware';
 import {
   addHotelController,
+  editHotelController,
   getAllHotelsController,
   getSingleHotelController,
 } from '../controllers/hotelControllers';
@@ -26,5 +27,11 @@ hotelRoutes.post(
 );
 hotelRoutes.get('/getAll', verifyToken, getAllHotelsController);
 hotelRoutes.get('/get/:id', verifyToken, getSingleHotelController);
+hotelRoutes.put(
+  '/edit',
+  verifyToken,
+  upload.array('imageFiles'),
+  editHotelController
+);
 
 export default hotelRoutes;

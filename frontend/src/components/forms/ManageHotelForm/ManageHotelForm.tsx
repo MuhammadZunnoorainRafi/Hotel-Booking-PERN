@@ -49,11 +49,12 @@ function ManageHotelForm({ onSave, hotel, isLoading }: Props) {
     formDataJson.facilities.forEach((facility, index) => {
       formData.append(`facilities[${index}]`, facility);
     });
-    // if (formDataJson.imageUrls) {
-    //   formDataJson.imageUrls.forEach((url, index) => {
-    //     formData.append(`imageUrls[${index}]`, url);
-    //   });
-    // }
+
+    if (formDataJson.image_urls) {
+      formDataJson.image_urls.forEach((url, ind) => {
+        formData.append(`image_urls[${ind}]`, url);
+      });
+    }
 
     Array.from(formDataJson.imageFiles).forEach((imageFile) => {
       formData.append(`imageFiles`, imageFile);

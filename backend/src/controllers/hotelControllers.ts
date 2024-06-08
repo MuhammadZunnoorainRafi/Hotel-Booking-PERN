@@ -102,3 +102,68 @@ export const getSingleHotelController = async (
     return res.status(400).json({ message: 'Error while fetching data' });
   }
 };
+
+export const editHotelController = async (req: RequestUser, res: Response) => {
+  const db = await pool.connect();
+  try {
+    const validations = hotelFormSchema.safeParse(req.body);
+    if (!validations.success) {
+      return res.status(400).json(validations.error.flatten().fieldErrors);
+    }
+
+    let {
+      id,
+      name,
+      city,
+      country,
+      description,
+      type,
+      star_rating,
+      facilities,
+      adult_count,
+      child_count,
+      price_per_night,
+      image_urls,
+    } = validations.data;
+    const imageFiles = req.files as Express.Multer.File[];
+    const imageUrls = await uploadImages(imageFiles);
+    console.log({ imageULRs: image_urls, reqImage: req.body.image_urls });
+    let allImageUrls;
+    if (image_urls) {
+      allImageUrls = [...image_urls, ...imageUrls];
+    }
+    const data = {
+      name: name,
+      city: city,
+      country: country,
+      description: description,
+      type: type,
+      adult_count: adult_count,
+      child_count: child_count,
+      facilities: facilities,
+      price_per_night: price_per_night,
+      star_rating: star_rating,
+      image_urls: allImageUrls,
+      id: id,
+      user_id: req.user?.id,
+      updated_at: new Date(),
+    };
+
+    const { rows } = await db.query(
+      'UPDATE hotels SET name=$1,city=$2,country=$3,description=$4,type=$5,adult_count=$6,child_count=$7,facilities=$8,price_per_night=$9,star_rating=$10,image_urls=$11,updated_at=$14 WHERE id=$12 AND user_id=$13 RETURNING updated_at',
+      Object.values(data)
+    );
+    if (rows[0]) {
+      res.status(200).json({ message: 'Hotel Updated Successfully' });
+    } else {
+      return res
+        .status(400)
+        .json({ message: 'Hotel Not Updated Successfully' });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: 'Something went wrong' });
+  } finally {
+    db.release();
+  }
+};

@@ -11,11 +11,7 @@ const ImagesSection = () => {
 
   const existingImageUrls = watch('image_urls');
 
-  const handleDelete = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    imageUrl: string
-  ) => {
-    event.preventDefault();
+  const handleDelete = (imageUrl: string) => {
     setValue(
       'image_urls',
       existingImageUrls?.filter((url) => url !== imageUrl)
@@ -32,7 +28,7 @@ const ImagesSection = () => {
               <div key={ind} className="relative group">
                 <img src={url} className="min-h-full object-cover" />
                 <button
-                  onClick={(event) => handleDelete(event, url)}
+                  onClick={() => handleDelete(url)}
                   className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 text-white"
                 >
                   Delete

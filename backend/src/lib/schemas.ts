@@ -12,6 +12,7 @@ export const userLogSchema = z.object({
 });
 
 export const hotelFormSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, 'Enter name'),
   city: z.string().min(1, 'Enter city'),
   country: z.string().min(1, 'Enter country'),
@@ -28,4 +29,5 @@ export const hotelFormSchema = z.object({
     .nonempty({ message: 'Select at least one field' }),
   adult_count: z.string().min(1, 'Enter adult count'),
   child_count: z.string().min(1, 'Enter child count'),
+  image_urls: z.array(z.string()).optional(),
 });
