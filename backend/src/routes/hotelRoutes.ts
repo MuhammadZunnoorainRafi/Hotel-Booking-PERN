@@ -37,6 +37,6 @@ hotelRoutes.put(
 
 // Searching & Filtering Routes
 
-hotelRoutes.get('search', searchHotelController);
+hotelRoutes.get('/search', searchHotelController);
 
 export default hotelRoutes;

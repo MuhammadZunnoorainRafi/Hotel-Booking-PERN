@@ -1,15 +1,6 @@
 import axios from 'axios';
-import { ErrorT, HotelSearchResponse } from '../lib/types';
+import { ErrorT, HotelSearchResponse, SearchParamsType } from '../lib/types';
 import { errorHandler } from '../lib/utils';
-
-export type SearchParamsType = {
-  destination?: string;
-  checkIn?: string;
-  checkOut?: string;
-  adultCount?: string;
-  childCount?: string;
-  page?: string;
-};
 
 const BASE_API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -25,7 +16,9 @@ export const searchHotels = async (
   queryParams.append('page', searchParams.page || '');
 
   try {
-    const res = await axios.get(`${BASE_API_URL}/search?${queryParams}`);
+    const res = await axios.get(
+      `${BASE_API_URL}/api/hotel/search?${queryParams}`
+    );
     return res.data;
   } catch (error) {
     throw new Error(errorHandler(error as ErrorT));

@@ -10,7 +10,7 @@ export const searchHotelController = async (req: Request, res: Response) => {
   const db = await pool.connect();
   try {
     const { rows, rowCount } = await db.query(
-      'SELECT * FROM hotels LIMIT=$1 OFFSET=$2',
+      'SELECT * FROM hotels LIMIT ($1) OFFSET ($2)',
       [pageSize, skip]
     );
     const total = rowCount || 0;
@@ -23,9 +23,9 @@ export const searchHotelController = async (req: Request, res: Response) => {
         pages: Math.ceil(total / pageSize),
       },
     };
-
     res.status(200).json(response);
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ message: 'Something went wrong' });
   }
 };
