@@ -8,10 +8,11 @@ import {
   getAllHotelsController,
   getSingleHotelController,
 } from '../controllers/hotelControllers';
+import { searchHotelController } from '../controllers/searchController';
 
-// const storage = multer.memoryStorage();
+const storage = multer.memoryStorage();
 const upload = multer({
-  storage: multer.memoryStorage(),
+  storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024,
   },
@@ -33,5 +34,9 @@ hotelRoutes.put(
   upload.array('imageFiles'),
   editHotelController
 );
+
+// Searching & Filtering Routes
+
+hotelRoutes.get('search', searchHotelController);
 
 export default hotelRoutes;

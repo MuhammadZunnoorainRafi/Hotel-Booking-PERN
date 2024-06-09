@@ -127,7 +127,6 @@ export const editHotelController = async (req: RequestUser, res: Response) => {
     } = validations.data;
     const imageFiles = req.files as Express.Multer.File[];
     const imageUrls = await uploadImages(imageFiles);
-    console.log({ imageULRs: image_urls, reqImage: req.body.image_urls });
     let allImageUrls;
     if (image_urls) {
       allImageUrls = [...image_urls, ...imageUrls];
