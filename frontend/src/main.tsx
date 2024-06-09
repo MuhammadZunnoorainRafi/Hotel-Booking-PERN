@@ -17,6 +17,9 @@ import { AppContextProvider } from './context/AppContext.tsx';
 import AddHotel from './pages/AddHotel.tsx';
 import MyHotels from './pages/MyHotels.tsx';
 import EditHotel from './pages/EditHotel.tsx';
+import Search from './pages/Search.tsx';
+import { SearchContextProvider } from './context/SearchContext.tsx';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="add-hotel" element={<AddHotel />} />
       <Route path="my-hotels" element={<MyHotels />} />
       <Route path="edit-hotel/:id" element={<EditHotel />} />
+      <Route path="/search" element={<Search />} />
     </Route>
   )
 );
@@ -43,7 +47,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppContextProvider>
-        <RouterProvider router={router} />
+        <SearchContextProvider>
+          <RouterProvider router={router} />
+        </SearchContextProvider>
       </AppContextProvider>
     </QueryClientProvider>
     <Toaster />

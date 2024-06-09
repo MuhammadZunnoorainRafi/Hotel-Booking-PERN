@@ -10,6 +10,23 @@ export type AppContextType = {
   };
 };
 
+export type SearchContextType = {
+  destination: string;
+  checkIn: Date;
+  checkOut: Date;
+  adultCount: number;
+  childCount: number;
+  hotelId?: string;
+  saveSearchValue: (
+    destination: string,
+    checkIn: Date,
+    checkOut: Date,
+    adultCount: number,
+    childCount: number,
+    hotelId?: string
+  ) => void;
+};
+
 export type User = {
   id: string;
   name: string;
@@ -58,6 +75,15 @@ export type HotelTypeSql = {
 };
 
 export type HotelFormData = z.infer<typeof hotelFormSchema>;
+
+export type HotelSearchResponse = {
+  data: HotelTypeSql[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+  };
+};
 
 export type ErrorT = {
   response: {
