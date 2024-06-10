@@ -3,6 +3,7 @@ import * as actions from '../actions/index';
 import { useQuery } from '@tanstack/react-query';
 import SearchResultsCard from '../components/SearchResultCard';
 import Pagination from '../components/Pagination';
+import StarRatingFilter from '../components/StarRatingFilter';
 
 function Search() {
   const context = useSearchContext();
@@ -25,15 +26,15 @@ function Search() {
       <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
         {/* TODO: */}
         FilterBy:
-        {/* <div className="space-y-5">
+        <div className="space-y-5">
           <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
             Filter by:
           </h3>
           <StarRatingFilter
-            selectedStars={selectedStars}
-            onChange={handleStarsChange}
+          // selectedStars={selectedStars}
+          // onChange={handleStarsChange}
           />
-          <HotelTypesFilter
+          {/* <HotelTypesFilter
             selectedHotelTypes={selectedHotelTypes}
             onChange={handleHotelTypeChange}
           />
@@ -44,8 +45,8 @@ function Search() {
           <PriceFilter
             selectedPrice={selectedPrice}
             onChange={(value?: number) => setSelectedPrice(value)}
-          />
-        </div> */}
+          /> */}
+        </div>
       </div>
       <div className="flex flex-col gap-5">
         <div className="flex justify-between items-center">

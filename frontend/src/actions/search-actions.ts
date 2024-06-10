@@ -8,13 +8,12 @@ export const searchHotels = async (
   searchParams: SearchParamsType
 ): Promise<HotelSearchResponse> => {
   const queryParams = new URLSearchParams();
-  queryParams.append('destination', searchParams.destination || '');
-  queryParams.append('checkIn', searchParams.checkIn || '');
-  queryParams.append('checkOut', searchParams.checkOut || '');
-  queryParams.append('adultCount', searchParams.adultCount || '');
-  queryParams.append('childCount', searchParams.childCount || '');
-  queryParams.append('page', searchParams.page || '');
-  console.log(searchParams.page);
+  queryParams.set('destination', searchParams.destination || '');
+  queryParams.set('checkIn', searchParams.checkIn || '');
+  queryParams.set('checkOut', searchParams.checkOut || '');
+  queryParams.set('adultCount', searchParams.adultCount || '');
+  queryParams.set('childCount', searchParams.childCount || '');
+  queryParams.set('page', searchParams.page || '');
   try {
     const res = await axios.get(
       `${BASE_API_URL}/api/hotel/search?${queryParams}`

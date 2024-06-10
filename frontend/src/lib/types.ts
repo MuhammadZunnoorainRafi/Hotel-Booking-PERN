@@ -93,6 +93,11 @@ export type SearchParamsType = {
   checkOut?: string;
   adultCount?: string;
   childCount?: string;
+  facilities?: string[];
+  types?: string[];
+  stars?: string[];
+  maxPrice?: string;
+  sortOptions?: string;
   page?: string;
 };
 

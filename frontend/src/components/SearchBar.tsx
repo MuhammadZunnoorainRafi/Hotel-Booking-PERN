@@ -14,9 +14,6 @@ function SearchBar() {
   const [adultCount, setAdultCount] = useState(context.adultCount);
   const [childCount, setChildCount] = useState(context.childCount);
 
-  const minDate = new Date();
-  const maxDate = new Date();
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     context.saveSearchValue(
@@ -29,6 +26,10 @@ function SearchBar() {
     context.setPage(1);
     navigate('/search');
   };
+
+  const minDate = new Date();
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 1);
 
   return (
     <div>

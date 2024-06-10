@@ -11,15 +11,31 @@ export const searchHotelController = async (req: Request, res: Response) => {
   const db = await pool.connect();
   try {
     const { rowCount } = await db.query(
-      'SELECT * FROM hotels WHERE city ILIKE $1 OR country ILIKE $1',
-      [`%${query.destination}%`]
-    );
-    const { rows } = await db.query(
-      'SELECT * FROM hotels WHERE  city ILIKE $3 OR country ILIKE $3 LIMIT $1 OFFSET $2',
-      [pageSize, skip, `%${query.destination}%`]
+      `SELECT * FROM hotels WHERE 
+       (city ILIKE $1 OR 
+       country ILIKE $1) AND
+       child_count >= $2 AND
+       adult_count >= $3`,
+      [`%${query.destination}%`, query.childCount, query.adultCount]
     );
 
-    // console.log(query);
+    const values = {
+      limit: pageSize,
+      offset: skip,
+      destination: `%${query.destination}%`,
+      childCount: query.childCount,
+      adultCount: query.adultCount,
+    };
+    const { rows } = await db.query(
+      `SELECT * FROM hotels WHERE 
+       (city ILIKE $3 OR 
+       country ILIKE $3) AND
+       child_count >= $4 AND
+       adult_count >= $5
+       LIMIT $1 OFFSET $2`,
+      Object.values(values)
+    );
+
     const total = rowCount || 0;
     const response: HotelSearchResponse = {
       data: rows,
