@@ -1,13 +1,11 @@
 import { useSearchContext } from '../lib/utils';
 import * as actions from '../actions/index';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import SearchResultsCard from '../components/SearchResultCard';
+import Pagination from '../components/Pagination';
 
 function Search() {
   const context = useSearchContext();
-
-  const [page, setPage] = useState(1);
 
   const searchParams = {
     destination: context.destination,
@@ -15,7 +13,7 @@ function Search() {
     checkOut: context.checkOut.toISOString(),
     adultCount: context.adultCount.toString(),
     childCount: context.childCount.toString(),
-    page: page.toString(),
+    page: context.page.toString(),
   };
 
   const { data: hotelData } = useQuery({
@@ -71,15 +69,14 @@ function Search() {
           </select>
         </div>
         {hotelData?.data.map((hotel) => (
-          <SearchResultsCard hotel={hotel} />
+          <SearchResultsCard key={hotel.id} hotel={hotel} />
         ))}
-        {/* <div>
+        <div>
           <Pagination
             page={hotelData?.pagination.page || 1}
             pages={hotelData?.pagination.pages || 1}
-            onPageChange={(page) => setPage(page)}
           />
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export const searchHotels = async (
   queryParams.append('adultCount', searchParams.adultCount || '');
   queryParams.append('childCount', searchParams.childCount || '');
   queryParams.append('page', searchParams.page || '');
-
+  console.log(searchParams.page);
   try {
     const res = await axios.get(
       `${BASE_API_URL}/api/hotel/search?${queryParams}`

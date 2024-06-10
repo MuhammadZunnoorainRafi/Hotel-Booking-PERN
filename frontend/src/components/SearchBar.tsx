@@ -26,7 +26,7 @@ function SearchBar() {
       adultCount,
       childCount
     );
-
+    context.setPage(1);
     navigate('/search');
   };
 

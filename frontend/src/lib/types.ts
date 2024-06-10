@@ -16,7 +16,9 @@ export type SearchContextType = {
   checkOut: Date;
   adultCount: number;
   childCount: number;
+  page: number;
   hotelId?: string;
+  setPage: (page: number) => void;
   saveSearchValue: (
     destination: string,
     checkIn: Date,

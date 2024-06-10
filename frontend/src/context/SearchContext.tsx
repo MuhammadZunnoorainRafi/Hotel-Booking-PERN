@@ -16,6 +16,7 @@ export const SearchContextProvider = ({
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [hotelId, setHotelId] = useState('');
+  const [page, setPage] = useState(1);
 
   const saveSearchValue = (
     destination: string,
@@ -44,7 +45,9 @@ export const SearchContextProvider = ({
         adultCount,
         childCount,
         hotelId,
+        page,
         saveSearchValue,
+        setPage,
       }}
     >
       {children}

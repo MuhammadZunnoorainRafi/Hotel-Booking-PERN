@@ -3,18 +3,24 @@ import { pool } from '../lib/db';
 import { HotelSearchResponse } from '../lib/types';
 
 export const searchHotelController = async (req: Request, res: Response) => {
-  const pageSize = 5;
-  const pageNumber = req.query.page ? parseInt(req.query.page.toString()) : 1;
+  const { query } = req;
+  const pageSize = 3;
+  const pageNumber = query.page ? parseInt(query.page.toString()) : 1;
   const skip = (pageNumber - 1) * pageSize;
 
   const db = await pool.connect();
   try {
-    const { rows, rowCount } = await db.query(
-      'SELECT * FROM hotels LIMIT ($1) OFFSET ($2)',
-      [pageSize, skip]
+    const { rowCount } = await db.query(
+      'SELECT * FROM hotels WHERE city ILIKE $1 OR country ILIKE $1',
+      [`%${query.destination}%`]
     );
-    const total = rowCount || 0;
+    const { rows } = await db.query(
+      'SELECT * FROM hotels WHERE  city ILIKE $3 OR country ILIKE $3 LIMIT $1 OFFSET $2',
+      [pageSize, skip, `%${query.destination}%`]
+    );
 
+    // console.log(query);
+    const total = rowCount || 0;
     const response: HotelSearchResponse = {
       data: rows,
       pagination: {
@@ -27,5 +33,7 @@ export const searchHotelController = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: 'Something went wrong' });
+  } finally {
+    db.release();
   }
 };
