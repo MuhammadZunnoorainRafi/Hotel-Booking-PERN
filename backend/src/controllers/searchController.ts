@@ -9,6 +9,13 @@ export const searchHotelController = async (req: Request, res: Response) => {
   const skip = (pageNumber - 1) * pageSize;
 
   const db = await pool.connect();
+
+  let stars = query.stars;
+
+  if (!Array.isArray(stars)) {
+    stars = [stars as string];
+  }
+
   try {
     const { rowCount } = await db.query(
       `SELECT * FROM hotels WHERE 
@@ -16,22 +23,28 @@ export const searchHotelController = async (req: Request, res: Response) => {
        country ILIKE $1) AND
        child_count >= $2 AND
        adult_count >= $3`,
-      [`%${query.destination}%`, query.childCount, query.adultCount]
+      [
+        `%${query.destination ? query.destination : ''}%`, // did this for some learning purposes
+        query.childCount,
+        query.adultCount,
+      ]
     );
-
     const values = {
       limit: pageSize,
       offset: skip,
-      destination: `%${query.destination}%`,
+      destination: `%${query.destination ? query.destination : ''}%`, // did this for some learning purposes
       childCount: query.childCount,
       adultCount: query.adultCount,
+      stars: query.stars ? stars : [1, 2, 3, 4, 5],
     };
+
     const { rows } = await db.query(
       `SELECT * FROM hotels WHERE 
        (city ILIKE $3 OR 
        country ILIKE $3) AND
        child_count >= $4 AND
-       adult_count >= $5
+       adult_count >= $5 AND
+       star_rating = ANY ($6)
        LIMIT $1 OFFSET $2`,
       Object.values(values)
     );

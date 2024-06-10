@@ -4,9 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import SearchResultsCard from '../components/SearchResultCard';
 import Pagination from '../components/Pagination';
 import StarRatingFilter from '../components/StarRatingFilter';
+import { useState } from 'react';
 
 function Search() {
   const context = useSearchContext();
+
+  const [selectedStars, setSelectedStars] = useState<string[]>([]);
 
   const searchParams = {
     destination: context.destination,
@@ -14,26 +17,37 @@ function Search() {
     checkOut: context.checkOut.toISOString(),
     adultCount: context.adultCount.toString(),
     childCount: context.childCount.toString(),
+    stars: selectedStars,
     page: context.page.toString(),
+  };
+
+  const handleStarsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const starRating = e.target.value;
+    setSelectedStars((prev) =>
+      e.target.checked
+        ? [...prev, starRating]
+        : selectedStars.filter((star) => star !== starRating)
+    );
   };
 
   const { data: hotelData } = useQuery({
     queryKey: ['searchHotels', searchParams],
     queryFn: () => actions.searchHotels(searchParams),
   });
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
       <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
-        {/* TODO: */}
         FilterBy:
         <div className="space-y-5">
           <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
             Filter by:
           </h3>
           <StarRatingFilter
-          // selectedStars={selectedStars}
-          // onChange={handleStarsChange}
+            selectedStars={selectedStars}
+            onChange={handleStarsChange}
           />
+          {/* TODO: */}
           {/* <HotelTypesFilter
             selectedHotelTypes={selectedHotelTypes}
             onChange={handleHotelTypeChange}
