@@ -6,12 +6,14 @@ import Pagination from '../components/Pagination';
 import StarRatingFilter from '../components/StarRatingFilter';
 import { useState } from 'react';
 import HotelTypesFilter from '../components/HotelTypesFilter';
+import FacilitiesFilter from '../components/FacilitiesFilter';
 
 function Search() {
   const context = useSearchContext();
 
   const [selectedStars, setSelectedStars] = useState<string[]>([]);
   const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 
   const searchParams = {
     destination: context.destination,
@@ -21,6 +23,7 @@ function Search() {
     childCount: context.childCount.toString(),
     stars: selectedStars,
     types: selectedHotelTypes,
+    facilities: selectedFacilities,
     page: context.page.toString(),
   };
 
@@ -38,9 +41,19 @@ function Search() {
     setSelectedHotelTypes((prev) =>
       e.target.checked
         ? [...prev, hotelType]
-        : selectedHotelTypes.filter((val) => val !== hotelType)
+        : selectedHotelTypes.filter((type) => type !== hotelType)
     );
   };
+
+  const handleFacilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const hotelFacility = e.target.value;
+    setSelectedFacilities((prev) =>
+      e.target.checked
+        ? [...prev, hotelFacility]
+        : selectedFacilities.filter((facility) => facility !== hotelFacility)
+    );
+  };
+
   const { data: hotelData, isLoading } = useQuery({
     queryKey: ['searchHotels', searchParams],
     queryFn: () => actions.searchHotels(searchParams),
@@ -48,7 +61,7 @@ function Search() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
+      <div className="rounded-lg border border-slate-300 p-5 mb-2 h-screen overflow-y-auto sticky top-1">
         FilterBy:
         <div className="space-y-5">
           <StarRatingFilter
@@ -59,13 +72,12 @@ function Search() {
             selectedHotelTypes={selectedHotelTypes}
             onChange={handleTypesChange}
           />
-          {/* TODO: */}
-
-          {/* <FacilitiesFilter
+          <FacilitiesFilter
             selectedFacilities={selectedFacilities}
             onChange={handleFacilityChange}
           />
-          <PriceFilter
+          {/* TODO: */}
+          {/*  <PriceFilter
             selectedPrice={selectedPrice}
             onChange={(value?: number) => setSelectedPrice(value)}
           /> */}

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pool } from '../lib/db';
 import { HotelSearchResponse } from '../lib/types';
-import { hotelTypes } from '../lib/constants';
+import { hotelFacilities, hotelTypes } from '../lib/constants';
 
 export const searchHotelController = async (req: Request, res: Response) => {
   const { query } = req;
@@ -13,6 +13,7 @@ export const searchHotelController = async (req: Request, res: Response) => {
 
   let stars = query.stars;
   let types = query.types;
+  let facilities = query.facilities;
 
   if (!Array.isArray(stars)) {
     stars = [stars as string];
@@ -20,6 +21,10 @@ export const searchHotelController = async (req: Request, res: Response) => {
 
   if (!Array.isArray(types)) {
     types = [types as string];
+  }
+
+  if (!Array.isArray(facilities)) {
+    facilities = [facilities as string];
   }
 
   try {
@@ -31,7 +36,14 @@ export const searchHotelController = async (req: Request, res: Response) => {
       adultCount: query.adultCount,
       stars: query.stars ? stars : [1, 2, 3, 4, 5],
       types: query.types ? types : hotelTypes,
+      facilities: query.facilities ? facilities : [],
     };
+
+    // The "&&" operator is used to check if two arrays have any elements in common (array overlap). It returns TRUE if there is at least one common element between the two arrays.
+
+    // The "ANY" operator is used to compare a single scalar value against a set of values (array or subquery result). It returns TRUE if the scalar value matches any element in the set.
+
+    //  The "@>" operator checks if the array on the left contains all elements of the array on the right.
 
     const { rowCount } = await db.query(
       `SELECT * FROM hotels WHERE 
@@ -40,7 +52,8 @@ export const searchHotelController = async (req: Request, res: Response) => {
        child_count >= $2 AND
        adult_count >= $3 AND
        star_rating = ANY ($4) AND
-       type = ANY ($5)`,
+       type = ANY ($5) AND
+       facilities @> $6`,
       Object.values(values).slice(2)
     );
 
@@ -51,7 +64,8 @@ export const searchHotelController = async (req: Request, res: Response) => {
        child_count >= $4 AND
        adult_count >= $5 AND
        star_rating = ANY ($6) AND
-       type = ANY ($7)
+       type = ANY ($7) AND
+       facilities @> $8
        LIMIT $1 OFFSET $2`,
       Object.values(values)
     );
