@@ -5,11 +5,13 @@ import SearchResultsCard from '../components/SearchResultCard';
 import Pagination from '../components/Pagination';
 import StarRatingFilter from '../components/StarRatingFilter';
 import { useState } from 'react';
+import HotelTypesFilter from '../components/HotelTypesFilter';
 
 function Search() {
   const context = useSearchContext();
 
   const [selectedStars, setSelectedStars] = useState<string[]>([]);
+  const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
 
   const searchParams = {
     destination: context.destination,
@@ -18,6 +20,7 @@ function Search() {
     adultCount: context.adultCount.toString(),
     childCount: context.childCount.toString(),
     stars: selectedStars,
+    types: selectedHotelTypes,
     page: context.page.toString(),
   };
 
@@ -30,7 +33,15 @@ function Search() {
     );
   };
 
-  const { data: hotelData } = useQuery({
+  const handleTypesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const hotelType = e.target.value;
+    setSelectedHotelTypes((prev) =>
+      e.target.checked
+        ? [...prev, hotelType]
+        : selectedHotelTypes.filter((val) => val !== hotelType)
+    );
+  };
+  const { data: hotelData, isLoading } = useQuery({
     queryKey: ['searchHotels', searchParams],
     queryFn: () => actions.searchHotels(searchParams),
   });
@@ -40,19 +51,17 @@ function Search() {
       <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
         FilterBy:
         <div className="space-y-5">
-          <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
-            Filter by:
-          </h3>
           <StarRatingFilter
             selectedStars={selectedStars}
             onChange={handleStarsChange}
           />
-          {/* TODO: */}
-          {/* <HotelTypesFilter
+          <HotelTypesFilter
             selectedHotelTypes={selectedHotelTypes}
-            onChange={handleHotelTypeChange}
+            onChange={handleTypesChange}
           />
-          <FacilitiesFilter
+          {/* TODO: */}
+
+          {/* <FacilitiesFilter
             selectedFacilities={selectedFacilities}
             onChange={handleFacilityChange}
           />
@@ -83,9 +92,19 @@ function Search() {
             </option>
           </select>
         </div>
-        {hotelData?.data.map((hotel) => (
-          <SearchResultsCard key={hotel.id} hotel={hotel} />
-        ))}
+        {isLoading ? (
+          <div className="grid grid-cols-3 gap-3 h-[330px] m-4">
+            <div className="col-span-1 skeleton"></div>
+            <div className="space-y-3 col-span-2">
+              <p className="skeleton h-5 w-[500px]"></p>
+              <p className="skeleton h-5 w-[400px]"></p>
+            </div>
+          </div>
+        ) : (
+          hotelData?.data.map((hotel) => (
+            <SearchResultsCard key={hotel.id} hotel={hotel} />
+          ))
+        )}
         <div>
           <Pagination
             page={hotelData?.pagination.page || 1}

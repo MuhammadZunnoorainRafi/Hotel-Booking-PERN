@@ -17,6 +17,7 @@ export const searchHotels = async (
   queryParams.set('page', searchParams.page || '');
 
   searchParams.stars?.forEach((star) => queryParams.append('stars', star));
+  searchParams.types?.forEach((type) => queryParams.append('types', type));
 
   try {
     const res = await axios.get(
