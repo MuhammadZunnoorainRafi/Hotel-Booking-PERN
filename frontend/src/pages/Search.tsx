@@ -7,6 +7,7 @@ import StarRatingFilter from '../components/StarRatingFilter';
 import { useState } from 'react';
 import HotelTypesFilter from '../components/HotelTypesFilter';
 import FacilitiesFilter from '../components/FacilitiesFilter';
+import PriceFilter from '../components/PriceFilter';
 
 function Search() {
   const context = useSearchContext();
@@ -14,6 +15,7 @@ function Search() {
   const [selectedStars, setSelectedStars] = useState<string[]>([]);
   const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  const [selectedPrice, setSelectedPrice] = useState(500);
 
   const searchParams = {
     destination: context.destination,
@@ -24,6 +26,7 @@ function Search() {
     stars: selectedStars,
     types: selectedHotelTypes,
     facilities: selectedFacilities,
+    maxPrice: selectedPrice.toString(),
     page: context.page.toString(),
   };
 
@@ -76,11 +79,10 @@ function Search() {
             selectedFacilities={selectedFacilities}
             onChange={handleFacilityChange}
           />
-          {/* TODO: */}
-          {/*  <PriceFilter
+          <PriceFilter
             selectedPrice={selectedPrice}
-            onChange={(value?: number) => setSelectedPrice(value)}
-          /> */}
+            onChange={(value: number) => setSelectedPrice(value)}
+          />
         </div>
       </div>
       <div className="flex flex-col gap-5">

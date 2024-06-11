@@ -15,6 +15,7 @@ export const searchHotels = async (
   queryParams.set('adultCount', searchParams.adultCount || '');
   queryParams.set('childCount', searchParams.childCount || '');
   queryParams.set('page', searchParams.page || '');
+  queryParams.set('maxPrice', searchParams.maxPrice || '');
 
   searchParams.stars?.forEach((star) => queryParams.append('stars', star));
   searchParams.types?.forEach((type) => queryParams.append('types', type));

@@ -37,6 +37,7 @@ export const searchHotelController = async (req: Request, res: Response) => {
       stars: query.stars ? stars : [1, 2, 3, 4, 5],
       types: query.types ? types : hotelTypes,
       facilities: query.facilities ? facilities : [],
+      price_per_night: query.maxPrice,
     };
 
     // The "&&" operator is used to check if two arrays have any elements in common (array overlap). It returns TRUE if there is at least one common element between the two arrays.
@@ -53,7 +54,8 @@ export const searchHotelController = async (req: Request, res: Response) => {
        adult_count >= $3 AND
        star_rating = ANY ($4) AND
        type = ANY ($5) AND
-       facilities @> $6`,
+       facilities @> $6 AND
+       price_per_night <= $7`,
       Object.values(values).slice(2)
     );
 
@@ -65,7 +67,8 @@ export const searchHotelController = async (req: Request, res: Response) => {
        adult_count >= $5 AND
        star_rating = ANY ($6) AND
        type = ANY ($7) AND
-       facilities @> $8
+       facilities @> $8 AND
+       price_per_night <= $9
        LIMIT $1 OFFSET $2`,
       Object.values(values)
     );
