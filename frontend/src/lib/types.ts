@@ -97,7 +97,7 @@ export type SearchParamsType = {
   types?: string[];
   stars?: string[];
   maxPrice?: string;
-  sortOptions?: string;
+  sortOption?: string;
   page?: string;
 };
 

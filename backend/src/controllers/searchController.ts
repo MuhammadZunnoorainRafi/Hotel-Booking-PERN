@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { pool } from '../lib/db';
 import { HotelSearchResponse } from '../lib/types';
-import { hotelFacilities, hotelTypes } from '../lib/constants';
+import { hotelTypes } from '../lib/constants';
 
 export const searchHotelController = async (req: Request, res: Response) => {
   const { query } = req;
@@ -14,6 +14,7 @@ export const searchHotelController = async (req: Request, res: Response) => {
   let stars = query.stars;
   let types = query.types;
   let facilities = query.facilities;
+  let sortQuery = '';
 
   if (!Array.isArray(stars)) {
     stars = [stars as string];
@@ -27,11 +28,24 @@ export const searchHotelController = async (req: Request, res: Response) => {
     facilities = [facilities as string];
   }
 
+  switch (query.sortOption) {
+    case 'starRating':
+      sortQuery = 'star_rating DESC';
+      break;
+    case 'pricePerNightAsc':
+      sortQuery = 'price_per_night ASC';
+      break;
+    case 'pricePerNightDesc':
+      sortQuery = 'price_per_night DESC';
+      break;
+  }
+
   try {
     const values = {
       limit: pageSize,
       offset: skip,
-      destination: `%${query.destination ? query.destination : ''}%`, // did this for some learning purposes
+      // destination: `%${query.destination ? query.destination : ''}%`, // did this for some learning purposes
+      destination: `%${query.destination || ''}%`,
       childCount: query.childCount,
       adultCount: query.adultCount,
       stars: query.stars ? stars : [1, 2, 3, 4, 5],
@@ -69,6 +83,7 @@ export const searchHotelController = async (req: Request, res: Response) => {
        type = ANY ($7) AND
        facilities @> $8 AND
        price_per_night <= $9
+       ${sortQuery && `ORDER BY ${sortQuery}`}
        LIMIT $1 OFFSET $2`,
       Object.values(values)
     );

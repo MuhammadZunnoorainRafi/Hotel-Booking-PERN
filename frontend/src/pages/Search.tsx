@@ -15,8 +15,8 @@ function Search() {
   const [selectedStars, setSelectedStars] = useState<string[]>([]);
   const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  const [sortOption, setSortOption] = useState('');
   const [selectedPrice, setSelectedPrice] = useState(500);
-
   const searchParams = {
     destination: context.destination,
     checkIn: context.checkIn.toISOString(),
@@ -28,6 +28,7 @@ function Search() {
     facilities: selectedFacilities,
     maxPrice: selectedPrice.toString(),
     page: context.page.toString(),
+    sortOption: sortOption,
   };
 
   const handleStarsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +63,13 @@ function Search() {
     queryFn: () => actions.searchHotels(searchParams),
   });
 
+  if (hotelData) {
+    const { pages } = hotelData.pagination;
+    if (pages < context.page) {
+      context.setPage(1);
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
       <div className="rounded-lg border border-slate-300 p-5 mb-2 h-screen overflow-y-auto sticky top-1">
@@ -92,8 +100,8 @@ function Search() {
             {context.destination ? ` in ${context.destination}` : ''}
           </span>
           <select
-            // value={sortOption}
-            // onChange={(event) => setSortOption(event.target.value)}
+            value={sortOption}
+            onChange={(event) => setSortOption(event.target.value)}
             className="p-2 border rounded-md"
           >
             <option value="">Sort By</option>
@@ -114,17 +122,23 @@ function Search() {
               <p className="skeleton h-5 w-[400px]"></p>
             </div>
           </div>
+        ) : hotelData && hotelData.data.length > 0 ? (
+          <>
+            {hotelData.data.map((hotel) => (
+              <SearchResultsCard key={hotel.id} hotel={hotel} />
+            ))}
+            <div className="mb-2">
+              <Pagination
+                page={hotelData?.pagination.page || 1}
+                pages={hotelData?.pagination.pages || 1}
+              />
+            </div>
+          </>
         ) : (
-          hotelData?.data.map((hotel) => (
-            <SearchResultsCard key={hotel.id} hotel={hotel} />
-          ))
+          <p className="text-center font-mono mt-28 text-slate-400 text-2xl font-semibold">
+            No Hotel Found!
+          </p>
         )}
-        <div>
-          <Pagination
-            page={hotelData?.pagination.page || 1}
-            pages={hotelData?.pagination.pages || 1}
-          />
-        </div>
       </div>
     </div>
   );

@@ -16,12 +16,15 @@ export const searchHotels = async (
   queryParams.set('childCount', searchParams.childCount || '');
   queryParams.set('page', searchParams.page || '');
   queryParams.set('maxPrice', searchParams.maxPrice || '');
+  queryParams.set('sortOption', searchParams.sortOption || '');
 
   searchParams.stars?.forEach((star) => queryParams.append('stars', star));
   searchParams.types?.forEach((type) => queryParams.append('types', type));
   searchParams.facilities?.forEach((facility) =>
     queryParams.append('facilities', facility)
   );
+
+  console.log('ZUNNOORAIN');
 
   try {
     const res = await axios.get(
