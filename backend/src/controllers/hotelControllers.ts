@@ -65,7 +65,7 @@ export const addHotelController = async (req: RequestUser, res: Response) => {
 
 // @desc Get All Hotels
 // @route /api/hotel/getAll
-// @access PRIVATE
+// @access PUBLIC
 
 export const getAllHotelsController = async (
   req: RequestUser,
@@ -73,18 +73,21 @@ export const getAllHotelsController = async (
 ) => {
   const db = await pool.connect();
   try {
-    const { rows } = await db.query('SELECT * FROM hotels WHERE user_id=$1', [
-      req.user?.id,
-    ]);
+    // const { rows } = await db.query('SELECT * FROM hotels WHERE user_id=$1', [
+    //   req.user?.id,
+    // ]);
+    const { rows } = await db.query('SELECT * FROM hotels');
     res.status(200).json(rows);
   } catch (error) {
     return res.status(400).json({ message: 'Error while fetching data' });
+  } finally {
+    db.release();
   }
 };
 
 // @desc Get Single Hotel
 // @route /api/hotel/getAll
-// @access PRIVATE
+// @access PUBLIC
 
 export const getSingleHotelController = async (
   req: RequestUser,
@@ -93,13 +96,16 @@ export const getSingleHotelController = async (
   const db = await pool.connect();
   const { id } = req.params;
   try {
-    const { rows } = await db.query(
-      'SELECT * FROM hotels WHERE id=$1 AND user_id=$2',
-      [id, req.user?.id]
-    );
+    // const { rows } = await db.query(
+    //   'SELECT * FROM hotels WHERE id=$1 AND user_id=$2',
+    //   [id, req.user?.id]
+    // );
+    const { rows } = await db.query('SELECT * FROM hotels WHERE id=$1', [id]);
     res.status(200).json(rows[0]);
   } catch (error) {
     return res.status(400).json({ message: 'Error while fetching data' });
+  } finally {
+    db.release();
   }
 };
 

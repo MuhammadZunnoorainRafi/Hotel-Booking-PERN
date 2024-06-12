@@ -2,13 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as actions from '../actions/index';
 import { userLogSchema } from '../lib/schemas';
 import { LogUser } from '../lib/types';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     register,
@@ -26,14 +27,14 @@ function Login() {
     onSuccess: async () => {
       toast.success('User Signed In');
       await queryClient.invalidateQueries({ queryKey: ['verifyToken'] });
-      navigate('/');
+      navigate(location.state?.from?.pathname || '/');
       reset();
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
-
+  console.log(location);
   const formSubmit = (formData: LogUser) => {
     mutation.mutate(formData);
   };

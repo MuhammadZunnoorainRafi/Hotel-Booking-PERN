@@ -24,8 +24,6 @@ export const searchHotels = async (
     queryParams.append('facilities', facility)
   );
 
-  console.log('ZUNNOORAIN');
-
   try {
     const res = await axios.get(
       `${BASE_API_URL}/api/hotel/search?${queryParams}`

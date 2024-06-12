@@ -22,9 +22,7 @@ function ManageHotelForm({ onSave, hotel, isLoading }: Props) {
       facilities: [],
     },
   });
-
   const { handleSubmit, reset } = formMethods;
-
   useEffect(() => {
     if (hotel) {
       reset(hotel);

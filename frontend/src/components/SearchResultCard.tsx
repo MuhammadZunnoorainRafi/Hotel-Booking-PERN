@@ -56,7 +56,7 @@ const SearchResultsCard = ({ hotel }: Props) => {
               £{hotel.price_per_night} per night
             </span>
             <Link
-              to={`/detail/${hotel.id}`}
+              to={`/details/${hotel.id}`}
               className="bg-blue-600 text-white h-full p-2 font-bold text-xl max-w-fit hover:bg-blue-500"
             >
               View More

@@ -26,8 +26,8 @@ hotelRoutes.post(
   upload.array('imageFiles', 6),
   addHotelController
 );
-hotelRoutes.get('/getAll', verifyToken, getAllHotelsController);
-hotelRoutes.get('/get/:id', verifyToken, getSingleHotelController);
+hotelRoutes.get('/getAll', getAllHotelsController);
+hotelRoutes.get('/get/:id', getSingleHotelController);
 hotelRoutes.put(
   '/edit',
   verifyToken,
