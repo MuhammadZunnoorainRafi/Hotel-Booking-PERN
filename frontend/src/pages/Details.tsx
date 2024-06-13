@@ -22,23 +22,23 @@ const Details = () => {
   }
 
   if (!hotelData) {
-    return <></>;
+    return <>No Hotel Found</>;
   }
 
   return (
     <div className="space-y-6">
       <div>
         <span className="flex">
-          {Array.from({ length: hotelData.star_rating }).map(() => (
-            <AiFillStar className="fill-yellow-400" />
+          {Array.from({ length: hotelData.star_rating }).map((_, ind) => (
+            <AiFillStar key={ind} className="fill-yellow-400" />
           ))}
         </span>
         <h1 className="text-3xl font-bold">{hotelData.name}</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {hotelData.image_urls.map((image) => (
-          <div className="h-[300px]">
+        {hotelData.image_urls.map((image, ind) => (
+          <div key={ind} className="h-[300px]">
             <img
               src={image}
               alt={hotelData.name}
@@ -49,8 +49,8 @@ const Details = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
-        {hotelData.facilities.map((facility) => (
-          <div className="border border-slate-300 rounded-sm p-3">
+        {hotelData.facilities.map((facility, ind) => (
+          <div key={ind} className="border border-slate-300 rounded-sm p-3">
             {facility}
           </div>
         ))}

@@ -34,7 +34,7 @@ function Login() {
       toast.error(error.message);
     },
   });
-  console.log(location);
+
   const formSubmit = (formData: LogUser) => {
     mutation.mutate(formData);
   };
@@ -47,6 +47,7 @@ function Login() {
           <label className="label">
             <span className="label-text">Email</span>
           </label>
+
           <input
             type="email"
             placeholder="email"

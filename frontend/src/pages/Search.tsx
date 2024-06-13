@@ -8,15 +8,25 @@ import { useState } from 'react';
 import HotelTypesFilter from '../components/HotelTypesFilter';
 import FacilitiesFilter from '../components/FacilitiesFilter';
 import PriceFilter from '../components/PriceFilter';
+import { useSearchParams } from 'react-router-dom';
 
 function Search() {
   const context = useSearchContext();
+  const [sParams, setSParams] = useSearchParams();
 
-  const [selectedStars, setSelectedStars] = useState<string[]>([]);
-  const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
-  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
-  const [sortOption, setSortOption] = useState('');
-  const [selectedPrice, setSelectedPrice] = useState(500);
+  const [selectedStars, setSelectedStars] = useState<string[]>(
+    sParams.getAll('stars')
+  );
+  const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>(
+    sParams.getAll('types')
+  );
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>(
+    sParams.getAll('facilities')
+  );
+  const [sortOption, setSortOption] = useState(sParams.get('sortOption') || '');
+  const [selectedPrice, setSelectedPrice] = useState(
+    parseInt(sParams.get('maxPrice') || '500')
+  );
   const searchParams = {
     destination: context.destination,
     checkIn: context.checkIn.toISOString(),
@@ -30,7 +40,6 @@ function Search() {
     page: context.page.toString(),
     sortOption: sortOption,
   };
-
   const handleStarsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const starRating = e.target.value;
     setSelectedStars((prev) =>
@@ -60,7 +69,7 @@ function Search() {
 
   const { data: hotelData, isLoading } = useQuery({
     queryKey: ['searchHotels', searchParams],
-    queryFn: () => actions.searchHotels(searchParams),
+    queryFn: () => actions.searchHotels(searchParams, setSParams),
   });
 
   if (hotelData) {

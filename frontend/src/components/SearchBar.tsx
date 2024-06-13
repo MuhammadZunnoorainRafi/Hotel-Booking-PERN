@@ -1,19 +1,25 @@
 import { FormEvent, useState } from 'react';
 import { useSearchContext } from '../lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MdTravelExplore } from 'react-icons/md';
 import DatePicker from 'react-datepicker';
 
 function SearchBar() {
   const context = useSearchContext();
+  const [sParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const [destination, setDestination] = useState(context.destination);
+  const [destination, setDestination] = useState(
+    sParams.get('destination') || ''
+  );
   const [checkIn, setCheckIn] = useState(context.checkIn);
   const [checkOut, setCheckOut] = useState(context.checkOut);
-  const [adultCount, setAdultCount] = useState(context.adultCount);
-  const [childCount, setChildCount] = useState(context.childCount);
-
+  const [adultCount, setAdultCount] = useState(
+    parseInt(sParams.get('adultCount') || '1')
+  );
+  const [childCount, setChildCount] = useState(
+    parseInt(sParams.get('childCount') || '1')
+  );
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     context.saveSearchValue(

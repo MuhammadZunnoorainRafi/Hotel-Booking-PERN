@@ -1,15 +1,17 @@
 import axios from 'axios';
 import { ErrorT, HotelSearchResponse, SearchParamsType } from '../lib/types';
 import { errorHandler } from '../lib/utils';
+import { SetURLSearchParams } from 'react-router-dom';
 
 const BASE_API_URL = import.meta.env.VITE_API_URL || '';
 
 export const searchHotels = async (
-  searchParams: SearchParamsType
+  searchParams: SearchParamsType,
+  setSParams: SetURLSearchParams
 ): Promise<HotelSearchResponse> => {
   const queryParams = new URLSearchParams();
   searchParams.destination && // did this for some learning purposes
-    queryParams.set('destination', searchParams.destination || '');
+    queryParams.set('destination', searchParams.destination);
   queryParams.set('checkIn', searchParams.checkIn || '');
   queryParams.set('checkOut', searchParams.checkOut || '');
   queryParams.set('adultCount', searchParams.adultCount || '');
@@ -23,7 +25,7 @@ export const searchHotels = async (
   searchParams.facilities?.forEach((facility) =>
     queryParams.append('facilities', facility)
   );
-
+  setSParams(queryParams);
   try {
     const res = await axios.get(
       `${BASE_API_URL}/api/hotel/search?${queryParams}`

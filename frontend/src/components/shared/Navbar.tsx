@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import { useAppContext } from '../../lib/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import * as actions from '../../actions/index';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import * as actions from '../../actions/index';
+import { useAppContext } from '../../lib/utils';
 
 function Navbar() {
   const { isLoggedIn, user } = useAppContext();

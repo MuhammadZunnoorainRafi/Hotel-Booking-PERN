@@ -21,6 +21,7 @@ import Search from './pages/Search.tsx';
 import { SearchContextProvider } from './context/SearchContext.tsx';
 import 'react-datepicker/dist/react-datepicker.css';
 import Details from './pages/Details.tsx';
+import Booking from './pages/Booking.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
       <Route path="edit-hotel/:id" element={<EditHotel />} />
       <Route path="/search" element={<Search />} />
       <Route path="/details/:id" element={<Details />} />
+      <Route path="/hotel/:id/booking" element={<Booking />} />
     </Route>
   )
 );
