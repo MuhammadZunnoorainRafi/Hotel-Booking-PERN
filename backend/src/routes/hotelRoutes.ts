@@ -1,14 +1,15 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import multer from 'multer';
-import { verifyToken } from '../middleware/authMiddleware';
 import {
   addHotelController,
+  bookingPaymentController,
   editHotelController,
   getAllHotelsController,
   getSingleHotelController,
-  stripePaymentController,
+  paymentIntentController,
 } from '../controllers/hotelControllers';
 import { searchHotelController } from '../controllers/searchController';
+import { verifyToken } from '../middleware/authMiddleware';
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -40,9 +41,11 @@ hotelRoutes.get('/search', searchHotelController);
 
 // Stripe Payment Route
 hotelRoutes.post(
-  '/:hotelId/booking/payment-intent',
+  '/booking/:hotelId/payment-intent',
   verifyToken,
-  stripePaymentController
+  paymentIntentController
 );
+
+hotelRoutes.post('/:hotelId/booking', verifyToken, bookingPaymentController);
 
 export default hotelRoutes;

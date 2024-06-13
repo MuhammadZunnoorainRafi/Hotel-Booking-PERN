@@ -176,7 +176,7 @@ export const editHotelController = async (req: RequestUser, res: Response) => {
   }
 };
 
-export const stripePaymentController = async (
+export const paymentIntentController = async (
   req: RequestUser,
   res: Response
 ) => {
@@ -184,21 +184,25 @@ export const stripePaymentController = async (
   // 1- Total price
   // 2- HotelId
   // 3- UserId
-  const { hotelId } = req.params;
   const { totalNights } = req.body;
   const db = await pool.connect();
   try {
     const { rows } = await db.query(
       `SELECT price_per_night FROM hotels WHERE id=$1`,
-      [hotelId]
+      [req.params.hotelId]
     );
+
+    if (!rows[0]) {
+      return res.status(400).json({ message: 'Hotel not found' });
+    }
+
     const totalPrice = totalNights * rows[0].price_per_night;
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalPrice,
-      currency: 'gbd',
+      amount: totalPrice * 100,
+      currency: 'gbp',
       metadata: {
         userId: req.user!.id,
-        hotelId: hotelId,
+        hotelId: req.params.hotelId,
       },
     });
     if (!paymentIntent.client_secret) {
@@ -212,6 +216,43 @@ export const stripePaymentController = async (
     };
 
     res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: 'Something went wrong' });
+  } finally {
+    db.release();
+  }
+};
+
+export const bookingPaymentController = async (
+  req: RequestUser,
+  res: Response
+) => {
+  const db = await pool.connect();
+  try {
+    const { paymentIntentId } = req.body;
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+    if (!paymentIntent) {
+      return res.status(400).json({ message: 'Payment Intent not found' });
+    }
+
+    if (
+      paymentIntent.metadata.userId !== req.user!.id ||
+      paymentIntent.metadata.hotelId !== req.params.hotelId
+    ) {
+      return res.status(400).json({ message: 'Payment Intent mismatch' });
+    }
+
+    if (paymentIntent.status !== 'succeeded') {
+      return res.status(400).json({ message: 'Payment Intent not succeeded' });
+    }
+
+    await db.query(
+      `INSERT INTO bookings(user_id,hotel_id,name,email,adult_count,child_count,check_in,check_out,total_cost)`,
+      []
+    );
+    res.status(200).send('from booking payment controller');
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: 'Something went wrong' });
