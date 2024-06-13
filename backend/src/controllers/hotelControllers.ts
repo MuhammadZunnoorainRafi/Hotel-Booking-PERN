@@ -3,6 +3,9 @@ import { hotelFormSchema } from '../lib/schemas';
 import { RequestUser } from '../middleware/authMiddleware';
 import { uploadImages } from '../lib/utils';
 import { pool } from '../lib/db';
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 
 // @desc Add Hotel
 // @route /api/hotel/add
@@ -165,6 +168,50 @@ export const editHotelController = async (req: RequestUser, res: Response) => {
         .status(400)
         .json({ message: 'Hotel Not Updated Successfully' });
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: 'Something went wrong' });
+  } finally {
+    db.release();
+  }
+};
+
+export const stripePaymentController = async (
+  req: RequestUser,
+  res: Response
+) => {
+  // we need three things to do payment
+  // 1- Total price
+  // 2- HotelId
+  // 3- UserId
+  const { hotelId } = req.params;
+  const { totalNights } = req.body;
+  const db = await pool.connect();
+  try {
+    const { rows } = await db.query(
+      `SELECT price_per_night FROM hotels WHERE id=$1`,
+      [hotelId]
+    );
+    const totalPrice = totalNights * rows[0].price_per_night;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalPrice,
+      currency: 'gbd',
+      metadata: {
+        userId: req.user!.id,
+        hotelId: hotelId,
+      },
+    });
+    if (!paymentIntent.client_secret) {
+      return res.status(400).json({ message: 'Payment Intent error' });
+    }
+
+    const response = {
+      paymentIntentId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret.toString(),
+      totalPrice,
+    };
+
+    res.status(200).json(response);
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: 'Something went wrong' });

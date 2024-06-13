@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import { hotelFormSchema } from '../lib/schemas';
 import { verifyToken } from '../middleware/authMiddleware';
 import {
   addHotelController,
   editHotelController,
   getAllHotelsController,
   getSingleHotelController,
+  stripePaymentController,
 } from '../controllers/hotelControllers';
 import { searchHotelController } from '../controllers/searchController';
 
@@ -35,8 +35,14 @@ hotelRoutes.put(
   editHotelController
 );
 
-// Searching & Filtering Routes
-
+// Searching & Filtering Route
 hotelRoutes.get('/search', searchHotelController);
+
+// Stripe Payment Route
+hotelRoutes.post(
+  '/:hotelId/booking/payment-intent',
+  verifyToken,
+  stripePaymentController
+);
 
 export default hotelRoutes;

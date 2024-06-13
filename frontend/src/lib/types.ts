@@ -109,3 +109,9 @@ export type ErrorT = {
   };
   message: string;
 };
+
+export type PaymentIntentResponse = {
+  paymentIntentId: string;
+  clientSecret: string;
+  totalPrice: number;
+};

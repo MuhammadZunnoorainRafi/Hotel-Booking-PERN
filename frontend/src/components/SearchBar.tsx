@@ -18,7 +18,7 @@ function SearchBar() {
     parseInt(sParams.get('adultCount') || '1')
   );
   const [childCount, setChildCount] = useState(
-    parseInt(sParams.get('childCount') || '1')
+    parseInt(sParams.get('childCount') || '0')
   );
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

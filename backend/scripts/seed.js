@@ -32,6 +32,24 @@ const createHotelTable = async (db) => {
   )`);
 };
 
+const createBookingTable = async (db) => {
+  await db.query(`CREATE TABLE IF NOT EXISTS bookings(
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID NOT NULL,
+    hotel_id UUID NOT NULL,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    adult_count INTEGER NOT NULL,
+    child_count INTEGER NOT NULL,
+    check_in DATE,
+    check_out DATE,
+    total_cost INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (hotel_id) REFERENCES hotels(id)
+    )`);
+};
+
 const main = async () => {
   const pool = new Pool({
     connectionString: process.env.POSTGRESQL_URI,
@@ -39,12 +57,15 @@ const main = async () => {
   const db = await pool.connect();
   await createUserTable(db);
   await createHotelTable(db);
+  await createBookingTable(db);
   db.release();
 };
 
-main().catch((error) => {
-  console.log(
-    'An error occurred while to attempting to seed the database: ',
-    error
-  );
-});
+main()
+  .then(() => console.log('Tables created successfully 🎉'))
+  .catch((error) => {
+    console.log(
+      'An error occurred while to attempting to seed the database: ',
+      error
+    );
+  });

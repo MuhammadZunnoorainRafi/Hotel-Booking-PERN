@@ -11,19 +11,24 @@ export const SearchContextProvider = ({
   children: ReactNode;
 }) => {
   const [destination, setDestination] = useState<string>(
-    sessionStorage.getItem('destination') || ''
+    // sessionStorage.getItem('destination') || ''
+    ''
   );
   const [checkIn, setCheckIn] = useState<Date>(
-    new Date(sessionStorage.getItem('checkIn') || new Date().toISOString())
+    // new Date(sessionStorage.getItem('checkIn') || new Date().toISOString())
+    new Date()
   );
   const [checkOut, setCheckOut] = useState<Date>(
-    new Date(sessionStorage.getItem('checkOut') || new Date().toISOString())
+    // new Date(sessionStorage.getItem('checkOut') || new Date().toISOString())
+    new Date()
   );
   const [adultCount, setAdultCount] = useState<number>(
-    parseInt(sessionStorage.getItem('adultCount') || '1')
+    // parseInt(sessionStorage.getItem('adultCount') || '1')
+    1
   );
   const [childCount, setChildCount] = useState<number>(
-    parseInt(sessionStorage.getItem('childCount') || '0')
+    // parseInt(sessionStorage.getItem('childCount') || '0')
+    0
   );
   const [hotelId, setHotelId] = useState('');
   const [page, setPage] = useState(1);
@@ -43,17 +48,16 @@ export const SearchContextProvider = ({
     setChildCount(childCount);
     if (hotelId) {
       setHotelId(hotelId);
-      sessionStorage.setItem('hotelId', hotelId);
     }
 
-    sessionStorage.setItem('destination', destination);
-    sessionStorage.setItem('checkIn', checkIn.toISOString());
-    sessionStorage.setItem('checkOut', checkOut.toISOString());
-    sessionStorage.setItem('childCount', childCount.toString());
-    sessionStorage.setItem('adultCount', adultCount.toString());
-    if (hotelId) {
-      sessionStorage.setItem('hotelId', hotelId);
-    }
+    // sessionStorage.setItem('destination', destination);
+    // sessionStorage.setItem('checkIn', checkIn.toISOString());
+    // sessionStorage.setItem('checkOut', checkOut.toISOString());
+    // sessionStorage.setItem('childCount', childCount.toString());
+    // sessionStorage.setItem('adultCount', adultCount.toString());
+    // if (hotelId) {
+    //   sessionStorage.setItem('hotelId', hotelId);
+    // }
   };
 
   return (

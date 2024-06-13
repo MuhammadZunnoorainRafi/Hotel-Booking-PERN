@@ -21,7 +21,20 @@ export type HotelTypeSql = {
   star_rating: number;
   image_urls: string[];
   created_at: Date;
-  // bookings: BookingType[];
+  bookings: BookingType[];
+};
+
+export type BookingType = {
+  id: string;
+  user_id: string;
+  hotel_id: string;
+  name: string;
+  email: string;
+  adult_count: number;
+  child_count: number;
+  check_in: Date;
+  check_out: Date;
+  total_cost: number;
 };
 
 export type HotelSearchResponse = {
