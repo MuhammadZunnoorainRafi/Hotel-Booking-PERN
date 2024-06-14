@@ -60,6 +60,13 @@ export const loginController = async (req: Request, res: Response) => {
       email,
     ]);
 
+    // 👇 Below query is for testing JOINS b\w USERS,HOTELS & BOOKINGS table for getting "booking" details
+    // const test = await db.query(`SELECT u.name,h.country,b.total_cost
+    //                                     FROM users u JOIN hotels h ON
+    //                                     u.id=h.user_id JOIN bookings b ON
+    //                                     b.hotel_id=h.id
+    //                                     `);
+
     if (
       userExists.rows[0] &&
       (await bcryptjs.compare(password, userExists.rows[0].password))
