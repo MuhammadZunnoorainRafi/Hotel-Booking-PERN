@@ -1,5 +1,6 @@
 import z from 'zod';
 import { hotelFormSchema, userLogSchema, userRegSchema } from './schemas';
+import { Stripe } from '@stripe/stripe-js';
 
 export type AppContextType = {
   isLoggedIn: boolean;
@@ -8,6 +9,7 @@ export type AppContextType = {
     name: string;
     email: string;
   };
+  stripePromise: Promise<Stripe | null>;
 };
 
 export type SearchContextType = {
@@ -115,3 +117,5 @@ export type PaymentIntentResponse = {
   clientSecret: string;
   totalPrice: number;
 };
+
+export type UserType = { id: string; name: string; email: string };

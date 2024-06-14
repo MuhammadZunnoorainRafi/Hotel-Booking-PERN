@@ -1,14 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { useSearchContext } from '../lib/utils';
+import { useAppContext, useSearchContext } from '../lib/utils';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import * as actions from '../actions/index';
 import BookingDetailsSummary from '../components/BookingDetailsSummary';
+import { Elements } from '@stripe/react-stripe-js';
+import BookingForm from '../components/forms/BookingForm/BookingForm';
 
 const Booking = () => {
-  //   const { stripePromise } = useAppContext();
+  const { stripePromise, user: currentUser } = useAppContext();
   const search = useSearchContext();
-  //   const appContext = useAppContext();
   const params = useParams();
 
   const [numberOfNights, setNumberOfNights] = useState<number>(0);
@@ -22,21 +23,19 @@ const Booking = () => {
       setNumberOfNights(Math.ceil(nights));
     }
   }, [search.checkIn, search.checkOut]);
-  //   const { data: paymentIntentData } = useQuery(
-  //     'createPaymentIntent',
-  //     () =>
-  //       apiClient.createPaymentIntent(
-  //         hotelId as string,
-  //         numberOfNights.toString()
-  //       ),
-  //     {
-  //       enabled: !!hotelId && numberOfNights > 0,
-  //     }
-  //   );
+  const { data: paymentIntentData } = useQuery({
+    queryKey: ['createPaymentIntent'],
+    queryFn: () =>
+      actions.createPaymentIntent(
+        params.id as string,
+        numberOfNights.toString()
+      ),
+    enabled: !!params.id && numberOfNights > 0,
+  });
 
   const { data: hotelData, isLoading } = useQuery({
     queryKey: ['fetchHotel', params.id],
-    queryFn: () => actions.getOneHotel(params.id || ''),
+    queryFn: () => actions.getOneHotel(params.id as string),
     enabled: !!params.id,
   });
 
@@ -51,7 +50,6 @@ const Booking = () => {
   if (!hotelData) {
     return <>No Hotel Found</>;
   }
-
   return (
     <div className="grid md:grid-cols-[1fr_2fr]">
       <BookingDetailsSummary
@@ -62,7 +60,7 @@ const Booking = () => {
         numberOfNights={numberOfNights}
         hotel={hotelData}
       />
-      {/* {currentUser && paymentIntentData && (
+      {currentUser && paymentIntentData && (
         <Elements
           stripe={stripePromise}
           options={{
@@ -74,7 +72,7 @@ const Booking = () => {
             paymentIntent={paymentIntentData}
           />
         </Elements>
-      )} */}
+      )}
     </div>
   );
 };

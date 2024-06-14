@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { hotelFormSchema } from '../lib/schemas';
+import { bookingSchema, hotelFormSchema } from '../lib/schemas';
 import { RequestUser } from '../middleware/authMiddleware';
 import { uploadImages } from '../lib/utils';
 import { pool } from '../lib/db';
@@ -180,7 +180,7 @@ export const paymentIntentController = async (
   req: RequestUser,
   res: Response
 ) => {
-  // we need three things to do payment
+  // we need three things to do payment intent
   // 1- Total price
   // 2- HotelId
   // 3- UserId
@@ -230,7 +230,24 @@ export const bookingPaymentController = async (
 ) => {
   const db = await pool.connect();
   try {
-    const { paymentIntentId } = req.body;
+    const validation = bookingSchema.safeParse(req.body);
+    if (!validation.success) {
+      console.log(validation.error.flatten().fieldErrors);
+      return res.status(400).json({ message: 'Validation failed' });
+    }
+
+    const {
+      paymentIntentId,
+      hotelId,
+      name,
+      email,
+      checkIn,
+      checkOut,
+      childCount,
+      adultCount,
+      totalCost,
+    } = validation.data;
+
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
     if (!paymentIntent) {
@@ -248,9 +265,21 @@ export const bookingPaymentController = async (
       return res.status(400).json({ message: 'Payment Intent not succeeded' });
     }
 
+    const values = {
+      userId: req.user!.id,
+      hotelId,
+      name,
+      email,
+      adultCount,
+      childCount,
+      checkIn,
+      checkOut,
+      totalCost,
+    };
+
     await db.query(
-      `INSERT INTO bookings(user_id,hotel_id,name,email,adult_count,child_count,check_in,check_out,total_cost)`,
-      []
+      `INSERT INTO bookings(user_id,hotel_id,name,email,adult_count,child_count,check_in,check_out,total_cost) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      Object.values(values)
     );
     res.status(200).send('from booking payment controller');
   } catch (error) {

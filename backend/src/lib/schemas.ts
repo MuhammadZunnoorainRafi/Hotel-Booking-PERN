@@ -31,3 +31,15 @@ export const hotelFormSchema = z.object({
   child_count: z.string().min(1, 'Enter child count'),
   image_urls: z.array(z.string()).optional(),
 });
+
+export const bookingSchema = z.object({
+  name: z.string().min(1, 'Enter name'),
+  email: z.string().min(1, 'Enter email').email('Enter a valid email address'),
+  childCount: z.number().min(0, 'min value is 0'),
+  adultCount: z.number().min(0, 'min value is 1'),
+  checkIn: z.string().min(1, { message: 'enter check_in date' }),
+  checkOut: z.string().min(1, { message: 'enter check_out date' }),
+  hotelId: z.string().min(1, 'enter hotelId'),
+  paymentIntentId: z.string().min(1, 'enter paymentIntentId'),
+  totalCost: z.number().min(1, 'Enter total cost'),
+});
