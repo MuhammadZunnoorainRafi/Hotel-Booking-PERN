@@ -5,6 +5,9 @@ import { SearchContext } from '../context/SearchContext';
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
+  // if (!context) {
+  //   throw new Error('CurrentUserContext: No value provided');
+  // }
   return context as AppContextType;
 };
 

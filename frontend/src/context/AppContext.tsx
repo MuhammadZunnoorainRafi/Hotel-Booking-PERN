@@ -20,9 +20,13 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     return <span className="loading loading-spinner"></span>;
   }
 
+  // if (isError) {
+  //   return <p>Error 🔴</p>;
+  // }
+
   return (
     <AppContext.Provider
-      value={{ isLoggedIn: !isError, user: data.user, stripePromise }}
+      value={{ isLoggedIn: !isError, user: data?.user, stripePromise }}
     >
       {children}
     </AppContext.Provider>
